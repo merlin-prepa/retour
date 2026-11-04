@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A0A0A">
+<title>Ta séance — Merlin_prépa</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='13.7 1 38 38'><defs><linearGradient id='f' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ffffff' stop-opacity='.9'/><stop offset='.45' stop-color='%23C8102E'/><stop offset='1' stop-color='%238B0A20'/></linearGradient></defs><polygon points='36.27,2 25.47,22.7 31.77,22.7 28.17,38 39.87,15.5 33.57,15.5' fill='url(%23f)'/></svg>">
+<style>
+:root{--bg:#0A0A0A;--card:#141414;--card2:#1C1C1C;--line:#2A2A2A;--ink:#EDEDED;--muted:#9A9A9A;--red:#C8102E;--red2:#8B0A20;--ok:#3FB37F}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;font-size:16px;line-height:1.4}
+body{padding:0 16px 140px;max-width:620px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:2px solid var(--red)}
+.brand-tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 12px;margin-bottom:6px}
+.progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
+.progress-bar{height:6px;background:var(--card2);border-radius:3px;overflow:hidden}
+.progress-bar div{height:100%;width:0;background:linear-gradient(90deg,var(--red2),var(--red));transition:width .3s}
+h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.08;margin:18px 0 10px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#cfcfcf;background:var(--card);border-left:4px solid var(--red);padding:12px 14px;border-radius:0 6px 6px 0;margin-bottom:22px}
+.meta b{color:#E63946;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-right:5px}
+.section{margin:26px 0 8px;display:flex;align-items:center;gap:10px}
+.section-dot{width:10px;height:10px;border-radius:50%;background:var(--red)}
+.section-title{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#ff6b7d}
+.section-meta{margin-left:auto;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.bloc{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.bloc-label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:linear-gradient(90deg,var(--red2),transparent);padding:7px 14px}
+.exo{padding:14px;border-top:1px solid var(--line)}
+.exo:first-of-type{border-top:0}
+.exo.done{opacity:.55}
+.exo-top{display:flex;gap:12px}
+.exo-img{flex-shrink:0;width:92px;height:72px;border-radius:6px;background:#fff center/cover no-repeat;cursor:zoom-in}
+.exo-img.empty{background:var(--card2);display:flex;align-items:center;justify-content:center;color:#555;cursor:default}
+.exo-num{font-size:11px;font-weight:800;color:var(--red);letter-spacing:.06em}
+.exo-name{font-size:16px;font-weight:700;line-height:1.2;margin:1px 0 6px}
+.specs{display:flex;flex-wrap:wrap;gap:5px}
+.spec{background:var(--card2);border-radius:4px;padding:3px 7px;font-size:12px;color:#cfcfcf}
+.spec b{color:#fff}
+.notes{font-size:13px;color:#bbb;margin-top:8px;border-left:2px solid var(--red);padding-left:8px}
+.video{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;font-weight:700;color:#fff;background:var(--red);border-radius:6px;padding:7px 12px;text-decoration:none}
+.sets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.set{min-width:48px;padding:10px 8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-align:center}
+.set.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.load{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.load input{width:110px;background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font:inherit;font-size:15px}
+.load input:focus{outline:none;border-color:var(--red)}
+/* chrono */
+.timer{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#111;border-top:3px solid var(--red);padding:12px 16px calc(12px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .25s}
+.timer.open{transform:none}
+.timer-in{max-width:620px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.timer-lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.timer-val{font-size:38px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.timer-val.end{color:var(--ok)}
+.timer-btns{margin-left:auto;display:flex;gap:6px}
+.tbtn{border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:8px;padding:10px 12px;font-weight:700;font-size:14px;cursor:pointer}
+.tbtn.red{background:var(--red);border-color:var(--red);color:#fff}
+.finish{display:block;width:100%;margin:26px 0 8px;border:0;border-radius:10px;padding:16px;font-size:17px;font-weight:800;background:var(--red);color:#fff;cursor:pointer;text-align:center;text-decoration:none}
+.finish-sub{text-align:center;font-size:12.5px;color:var(--muted)}
+.state{text-align:center;padding:80px 10px;color:var(--muted)}
+.state h2{color:var(--ink);font-size:22px;margin-bottom:8px}
+.zoom{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:16px}
+.zoom.open{display:flex}
+.zoom img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+</style>
+</head>
+<body>
+<header>
+  <svg class="mp-logo" viewBox="-68.6 1.2 138.3 50.1" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Merlin Prépa" style="height:42px;width:auto;display:block;"><defs><linearGradient id="mpLogoSea" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".9"/><stop offset="45%" stop-color="#C8102E"/><stop offset="100%" stop-color="#8B0A20"/></linearGradient></defs><g transform="translate(0 27.30) skewX(-4) translate(0 -27.30)">
+<g fill="#FFFFFF"><path d="M-66.25 31.640625H-59.875L-58.390625 22.640625C-58.09375 20.921875 -57.625 17.0625 -57.140625 13.75C-56.9375 17.1875 -56.578125 20.8125 -56.328125 22.640625L-55.0625 31.640625H-49.8125L-45.625 22.640625C-44.734375 20.75 -43.109375 16.890625 -41.78125 13.359375C-42.390625 16.75 -43.25 20.859375 -43.546875 22.640625L-45.03125 31.640625H-38.65625L-34.796875 8.359375H-44.78125L-48.046875 15.640625C-48.8125 17.34375 -50.125 20.921875 -51.15625 23.96875C-51.203125 20.921875 -51.328125 17.34375 -51.53125 15.640625L-52.421875 8.359375H-62.390625Z"/><path d="M-35.65625 31.640625H-18.9375L-18.09375 26.546875H-28.5L-27.8125 22.359375H-18.21875L-17.390625 17.390625H-26.984375L-26.328125 13.453125H-15.859375L-15.015625 8.359375H-31.796875Z"/><path d="M-15.75 31.640625H-9.4375L-8.171875 23.953125H-5.984375L-3.15625 31.640625H3.71875L0.40625 22.953125C3.09375 21.765625 4.953125 19.5 5.484375 16.265625C6.296875 11.328125 3.328125 8.359375 -1.859375 8.359375H-11.890625ZM-7.359375 19.046875 -6.421875 13.421875H-4.203125C-1.96875 13.421875 -0.78125 14.28125 -1.109375 16.265625C-1.4375 18.265625 -2.90625 19.046875 -5.140625 19.046875Z"/><path d="M5.625 31.640625H21.34375L22.1875 26.546875H12.78125L15.796875 8.359375H9.484375Z"/><path d="M41.71875 31.640625H48.21875L49.625 23.140625C49.875 21.609375 50.140625 19.046875 50.390625 16.375C51.09375 18.984375 51.65625 20.78125 52.703125 23.140625L56.46875 31.640625H63.34375L67.203125 8.359375H60.703125L59.28125 16.890625C59.0 18.59375 58.734375 21.453125 58.5 23.828125C57.96875 21.1875 57.328125 19.421875 56.484375 17.5L52.453125 8.359375H45.578125Z"/></g>
+<polygon points="36.27,2.00 25.47,22.70 31.77,22.70 28.17,38.00 39.87,15.50 33.57,15.50" fill="url(#mpLogoSea)"/>
+<g fill="#C8102E"><path d="M-33.5548828125 50.5927734375H-30.793164062499997L-30.294140624999997 47.5712890625H-28.762890624999997C-26.438671874999997 47.5712890625 -24.654492187499997 46.2041015625 -24.292187499999997 44.0166015625C-23.929882812499997 41.8427734375 -25.208203124999997 40.4072265625 -27.477734374999997 40.4072265625H-31.866406249999997ZM-29.938671874999997 45.4248046875 -29.473828124999997 42.6220703125H-28.503124999999997C-27.525585937499997 42.6220703125 -27.026562499999997 43.134765625 -27.176953124999997 44.0166015625C-27.320507812499997 44.8779296875 -27.990429687499997 45.4248046875 -28.967968749999997 45.4248046875Z"/><path d="M-19.47421875 50.5927734375H-16.7125L-16.1587890625 47.2294921875H-15.201757812499999L-13.964453124999999 50.5927734375H-10.956640624999999L-12.405859374999999 46.7919921875C-11.230078124999999 46.2724609375 -10.416601562499999 45.28125 -10.184179687499999 43.8662109375C-9.828710937499999 41.7060546875 -11.127539062499999 40.4072265625 -13.397070312499999 40.4072265625H-17.7857421875ZM-15.803320312499999 45.0830078125 -15.393164062499999 42.6220703125H-14.422460937499999C-13.444921874999999 42.6220703125 -12.925390624999999 42.998046875 -13.068945312499999 43.8662109375C-13.212499999999999 44.7412109375 -13.855078124999999 45.0830078125 -14.832617187499999 45.0830078125Z"/><path d="M-5.22265625 50.5927734375H2.091796875L2.4609375 48.3642578125H-2.091796875L-1.791015625 46.5322265625H2.40625L2.7685546875 44.3583984375H-1.4287109375L-1.1416015625 42.6357421875H3.4384765625L3.8076171875 40.4072265625H-3.5341796875ZM-0.6220703125 39.4638671875H1.1826171875L3.0419921875 37.2353515625H0.6904296875Z"/><path d="M8.386328124999999 50.5927734375H11.148046874999999L11.647070312499999 47.5712890625H13.178320312499999C15.502539062499999 47.5712890625 17.28671875 46.2041015625 17.6490234375 44.0166015625C18.011328125 41.8427734375 16.7330078125 40.4072265625 14.463476562499999 40.4072265625H10.074804687499999ZM12.002539062499999 45.4248046875 12.467382812499999 42.6220703125H13.438085937499999C14.415624999999999 42.6220703125 14.914648437499999 43.134765625 14.764257812499999 44.0166015625C14.620703124999999 44.8779296875 13.950781249999999 45.4248046875 12.973242187499999 45.4248046875Z"/><path d="M22.125195312499997 50.5927734375H25.324414062499997L26.206249999999997 48.6376953125H29.343945312499997L29.603710937499997 50.5927734375H32.6251953125L30.888867187499997 40.4072265625H27.115429687499997ZM27.135937499999997 46.5732421875C27.696484374999997 45.3291015625 28.209179687499997 43.99609375 28.708203124999997 42.669921875C28.797070312499997 43.99609375 28.906445312499997 45.3291015625 29.070507812499997 46.5732421875Z"/></g>
+</g></svg>
+  <div class="brand-tag">Ta séance</div>
+</header>
+
+<div id="app"><div class="state"><h2>Chargement…</h2><p>Ta séance arrive.</p></div></div>
+
+<div class="timer" id="timer">
+  <div class="timer-in">
+    <div>
+      <div class="timer-lbl" id="timer-lbl">Repos</div>
+      <div class="timer-val" id="timer-val">0:00</div>
+    </div>
+    <div class="timer-btns">
+      <button class="tbtn" id="t-minus">−15</button>
+      <button class="tbtn" id="t-plus">+15</button>
+      <button class="tbtn red" id="t-skip">OK</button>
+    </div>
+  </div>
+</div>
+<div class="zoom" id="zoom"><img alt=""></div>
+
+<script>
+/* ============ CONFIGURATION ============ */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxWHl2GMfL6-zYZzI3VRdguAmPUCYMl0UykZUp1_ME17vkSewACNKa1GDuG5omllOgW/exec";      // script Google (lecture des séances)
+const RETOUR_URL = "index.html";          // page de retour (même dossier)
+/* ======================================= */
+
+const id = new URLSearchParams(location.search).get('id') || '';
+const KEY = 'mp-seance-' + id;
+let S = null;                 // séance
+let P = { sets:{}, loads:{} };// progression (gardée sur le téléphone)
+
+function esc(s){return String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function loadP(){ try { const x = JSON.parse(localStorage.getItem(KEY)); if (x) P = Object.assign({sets:{},loads:{}}, x); } catch(e){} }
+function saveP(){ try { localStorage.setItem(KEY, JSON.stringify(P)); } catch(e){} }
+
+async function init(){
+  if (!id) return fail('Lien incomplet', 'Demande à ton coach de te renvoyer le lien de la séance.');
+  loadP();
+  try {
+    const cached = (()=>{ try { return JSON.parse(localStorage.getItem(KEY + '-data')); } catch(e){ return null; } })();
+    let data = null;
+    try {
+      const res = await fetch(SCRIPT_URL + '?seance=' + encodeURIComponent(id) + '&t=' + Date.now());
+      data = await res.json();
+    } catch(e) { if (cached) data = { ok:true, seance:cached }; else throw e; }
+    if (!data.ok) return fail('Séance introuvable', 'Ce lien ne correspond à aucune séance. Demande à ton coach de te le renvoyer.');
+    S = data.seance;
+    try { localStorage.setItem(KEY + '-data', JSON.stringify(S)); } catch(e){}
+    render();
+  } catch(e) {
+    fail('Pas de connexion', 'Impossible de charger ta séance. Vérifie ta connexion et recharge la page.');
+  }
+}
+function fail(t, m){ document.getElementById('app').innerHTML = `<div class="state"><h2>${esc(t)}</h2><p>${esc(m)}</p></div>`; }
+
+function specsHtml(x){
+  const out = [];
+  if (x.series) out.push(`<b>${esc(x.series)}</b> séries`);
+  if (x.reps) out.push(`<b>${esc(x.reps)}</b>${x.repsUnit ? ' ' + esc(x.repsUnit) : ' reps'}`);
+  if (x.charge) out.push(`<b>${esc(x.charge)}</b> ${esc(x.chargeUnit || 'kg')}`);
+  if (x.repos) out.push(`repos <b>${esc(x.repos)}</b>`);
+  if (x.rpe) out.push(`RPE <b>${esc(x.rpe)}</b>`);
+  if (x.rir) out.push(`RIR <b>${esc(x.rir)}</b>`);
+  return out.map(t => `<span class="spec">${t}</span>`).join('');
+}
+
+function nbSets(x){ const n = parseInt(x.series, 10); return n > 0 && n <= 20 ? n : 1; }
+function allExos(){ const l = []; (S.sections||[]).forEach((sec,si)=>sec.blocs.forEach((b,bi)=>b.exos.forEach((x,ei)=>l.push({x, k:`${si}-${bi}-${ei}`})))); return l; }
+function counts(){ let tot=0, done=0; allExos().forEach(({x,k})=>{ const n=nbSets(x); tot+=n; for(let i=0;i<n;i++) if(P.sets[k+'-'+i]) done++; }); return {tot,done}; }
+
+function render(){
+  document.title = (S.titre || 'Ta séance') + ' — Merlin_prépa';
+  const prenom = (S.client || '').split(' ')[0];
+  const d = S.date ? new Date(S.date + 'T12:00:00') : null;
+  const meta = [
+    d && !isNaN(d) ? `<div><b>Date</b>${d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}</div>` : '',
+    S.duree ? `<div><b>Durée</b>${esc(S.duree)}</div>` : '',
+    S.objectif ? `<div><b>Objectif</b>${esc(S.objectif)}</div>` : '',
+  ].join('');
+  let html = `
+    <div class="progress"><div class="progress-row"><span id="pg-txt"></span><span id="pg-pct"></span></div><div class="progress-bar"><div id="pg-bar"></div></div></div>
+    <h1>${prenom ? esc(prenom) + ', voici ta séance' : esc(S.titre || 'Ta séance')}</h1>
+    ${prenom && S.titre ? `<div style="color:var(--muted);margin:-4px 0 14px;font-weight:600">${esc(S.titre)}</div>` : ''}
+    ${meta ? `<div class="meta">${meta}</div>` : ''}`;
+  (S.sections||[]).forEach((sec, si) => {
+    const nb = sec.blocs.reduce((a,b)=>a+b.exos.length,0);
+    html += `<div class="section"><div class="section-dot"></div><div class="section-title">${esc(sec.title)}</div><div class="section-meta">${nb} exercice${nb>1?'s':''}</div></div>`;
+    sec.blocs.forEach((b, bi) => {
+      html += `<div class="bloc"><div class="bloc-label">${esc(b.nom || 'Bloc ' + b.label)}${b.exos.length > 1 ? ' · Super-set' : ''}</div>`;
+      b.exos.forEach((x, ei) => {
+        const k = `${si}-${bi}-${ei}`, n = nbSets(x);
+        let sets = '';
+        for (let i = 0; i < n; i++) sets += `<button class="set${P.sets[k+'-'+i]?' on':''}" data-k="${k}" data-i="${i}">${n>1?'Série '+(i+1):'Fait'}</button>`;
+        const showLoad = x.chargeUnit !== '%' && x.chargeUnit !== 'BPM';
+        html += `
+          <div class="exo" id="exo-${k}">
+            <div class="exo-top">
+              ${x.img ? `<div class="exo-img" style="background-image:url('${esc(x.img)}')" data-img="${esc(x.img)}"></div>` : `<div class="exo-img empty">◧</div>`}
+              <div style="min-width:0">
+                <div class="exo-num">${esc(x.num)}</div>
+                <div class="exo-name">${esc(x.nom)}</div>
+                <div class="specs">${specsHtml(x)}</div>
+              </div>
+            </div>
+            ${x.notes ? `<div class="notes">${esc(x.notes)}</div>` : ''}
+            ${x.video ? `<a class="video" href="${esc(x.video)}" target="_blank" rel="noopener">▶ Voir la vidéo</a>` : ''}
+            <div class="sets">${sets}</div>
+            ${showLoad ? `<div class="load">Charge utilisée <input type="text" inputmode="decimal" data-load="${k}" value="${esc(P.loads[k]||'')}" placeholder="${esc(x.charge ? x.charge + ' ' + (x.chargeUnit||'kg') : 'ex. 40 kg')}"></div>` : ''}
+          </div>`;
+      });
+      html += `</div>`;
+    });
+  });
+  html += `<a class="finish" id="finish" href="#">Terminer la séance →</a><div class="finish-sub">Puis donne-moi ton ressenti en 30 secondes.</div>`;
+  document.getElementById('app').innerHTML = html;
+
+  document.querySelectorAll('.set').forEach(b => b.onclick = () => toggleSet(b));
+  document.querySelectorAll('[data-load]').forEach(inp => inp.oninput = () => { P.loads[inp.dataset.load] = inp.value.trim(); saveP(); });
+  document.querySelectorAll('.exo-img[data-img]').forEach(el => el.onclick = () => { const z = document.getElementById('zoom'); z.querySelector('img').src = el.dataset.img; z.classList.add('open'); });
+  document.getElementById('finish').onclick = finish;
+  updateProgress();
+}
+
+function toggleSet(b){
+  const k = b.dataset.k, key = k + '-' + b.dataset.i;
+  P.sets[key] = !P.sets[key];
+  b.classList.toggle('on', P.sets[key]);
+  saveP(); updateProgress();
+  if (P.sets[key]) {
+    const [si,bi,ei] = k.split('-').map(Number);
+    const bloc = S.sections[si].blocs[bi];
+    const x = bloc.exos[ei];
+    // super-set : le repos se lance après le dernier exo du bloc
+    const last = ei === bloc.exos.length - 1;
+    const sec = parseRest(x.repos || (last ? bloc.exos.map(e=>e.repos).find(Boolean) : ''));
+    if (sec && (last || bloc.exos.length === 1)) startTimer(sec, x.nom);
+    if (bloc.exos.length > 1 && !last) { // passer à l'exo suivant du super-set
+      const nx = document.getElementById(`exo-${si}-${bi}-${ei+1}`); if (nx) nx.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  }
+}
+
+function updateProgress(){
+  const {tot, done} = counts();
+  const pct = tot ? Math.round(done/tot*100) : 0;
+  document.getElementById('pg-txt').textContent = `${done} / ${tot} séries`;
+  document.getElementById('pg-pct').textContent = pct + ' %';
+  document.getElementById('pg-bar').style.width = pct + '%';
+  allExos().forEach(({x,k}) => { const n = nbSets(x); let ok = true; for (let i=0;i<n;i++) if(!P.sets[k+'-'+i]) ok=false; const el = document.getElementById('exo-'+k); if (el) el.classList.toggle('done', ok); });
+}
+
+// "1'30" "1’30" "90s" "90\"" "2 min" "1:30" "45" → secondes
+function parseRest(r){
+  if (!r) return 0;
+  const s = String(r).toLowerCase().replace(/\s/g,'').replace(/’/g,"'").replace(/''/g,'"');
+  let m;
+  if ((m = s.match(/^(\d+)[':m](?:in)?(\d{1,2})?(?:"|s)?$/))) return (+m[1])*60 + (+(m[2]||0));
+  if ((m = s.match(/^(\d+)(?:"|s|sec)?$/))) return +m[1] > 15 || /["s]/.test(s) ? +m[1] : (+m[1])*60;
+  if ((m = s.match(/^(\d+(?:[.,]\d+)?)min$/))) return Math.round(parseFloat(m[1].replace(',','.'))*60);
+  return 0;
+}
+
+// ---------- Chrono ----------
+let tEnd = 0, tInt = null, tDone = false;
+function startTimer(sec, nom){
+  tEnd = Date.now() + sec*1000; tDone = false;
+  document.getElementById('timer-lbl').textContent = 'Repos · ' + (nom || '');
+  document.getElementById('timer').classList.add('open');
+  clearInterval(tInt); tick(); tInt = setInterval(tick, 250);
+}
+function tick(){
+  const left = Math.max(0, Math.round((tEnd - Date.now())/1000));
+  const el = document.getElementById('timer-val');
+  el.textContent = Math.floor(left/60) + ':' + String(left%60).padStart(2,'0');
+  el.classList.toggle('end', left === 0);
+  if (left === 0 && !tDone) { tDone = true; buzz(); document.getElementById('timer-lbl').textContent = 'C\'est reparti 💪'; setTimeout(stopTimer, 4000); }
+}
+function stopTimer(){ clearInterval(tInt); document.getElementById('timer').classList.remove('open'); }
+function buzz(){
+  try { navigator.vibrate && navigator.vibrate([300,150,300]); } catch(e){}
+  try { const a = new (window.AudioContext||window.webkitAudioContext)(); [0,0.25].forEach(t=>{ const o=a.createOscillator(), g=a.createGain(); o.frequency.value=880; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(.25,a.currentTime+t); o.start(a.currentTime+t); o.stop(a.currentTime+t+.15); }); } catch(e){}
+}
+document.getElementById('t-plus').onclick = () => { tEnd += 15000; tDone = false; };
+document.getElementById('t-minus').onclick = () => { tEnd -= 15000; };
+document.getElementById('t-skip').onclick = stopTimer;
+document.getElementById('zoom').onclick = () => document.getElementById('zoom').classList.remove('open');
+
+// ---------- Fin de séance → page de retour ----------
+function finish(e){
+  e.preventDefault();
+  const {tot, done} = counts();
+  const fait = done === 0 ? '' : (done >= tot ? 'En entier' : 'En partie');
+  const loads = [];
+  allExos().forEach(({x,k}) => { if (P.loads[k]) loads.push(`${x.nom} : ${P.loads[k]}`); });
+  const extra = [`${done}/${tot} séries faites`].concat(loads.length ? ['Charges : ' + loads.join(' · ')] : []).join(' — ');
+  const q = [['nom', S.client], ['seance', S.titre], ['date', S.date], ['fait', fait], ['extra', extra]]
+    .filter(([,v]) => v).map(([k,v]) => k + '=' + encodeURIComponent(v)).join('&');
+  location.href = RETOUR_URL + '?' + q;
+}
+
+init();
+</script>
+</body>
+</html>

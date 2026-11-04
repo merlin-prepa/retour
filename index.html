@@ -11,7 +11,7 @@
    CONFIGURATION — colle ici le lien prérempli de ton Google Form
    (généré avec NOM, SEANCE, DATE, FAIT, RPE, DUREE, DOULEUR, OU,
    INTENSITE, QUAND, FATIGUE, SOMMEIL, COURBATURES, COMMENTAIRE comme réponses)
-   → voir la variable FORM_PREFILL_URL dans le <script> plus bas
+   → voir la variable FORM_PREFILL_URL dans le script plus bas
    ============================================================ */
 :root{
   --bg:#0A0A0A; --card:#141414; --card2:#1C1C1C; --line:#2A2A2A; --ink:#EDEDED; --muted:#9A9A9A;
@@ -251,6 +251,8 @@ const P = new URLSearchParams(location.search);
 const urlNom = (P.get('nom') || '').trim();
 const urlSeance = (P.get('seance') || '').trim();
 const urlDate = (P.get('date') || '').trim();
+const urlFait = (P.get('fait') || '').trim();     // envoyé par la séance interactive
+const urlExtra = (P.get('extra') || '').trim();   // séries faites + charges utilisées
 
 const S = { fait:'', rpe:null, douleur:'', fatigue:null, sommeil:null, courbatures:null, pains:{} };
 
@@ -279,7 +281,8 @@ function chipGroup(id, onPick){
   });
   return v => el.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x.dataset.v === v));
 }
-chipGroup('fait', v => { S.fait = v; document.getElementById('bloc-effort').classList.toggle('hidden', v === 'Pas faite'); });
+const setFait = chipGroup('fait', v => { S.fait = v; document.getElementById('bloc-effort').classList.toggle('hidden', v === 'Pas faite'); });
+if (['En entier','En partie','Pas faite'].includes(urlFait)) { S.fait = urlFait; setFait(urlFait); }
 chipGroup('douleur', v => { S.douleur = v; document.getElementById('bloc-body').classList.toggle('hidden', v !== 'Oui'); });
 
 // ---------- RPE (échelle CR-10) ----------
@@ -363,7 +366,7 @@ function shapeSvg(s, mirror, attrs, title){
   return `<rect x="${nx}" y="${y}" width="${w}" height="${h}" rx="${rx}" ${attrs}>${t}</rect>`;
 }
 
-function painColor(i){ return rpeColor(Math.min(10, i)); }
+function painColor(i){ return `hsl(${Math.max(0, 48 - Math.min(10, i) * 5.3)},85%,${i >= 8 ? 44 : 50}%)`; } // jaune → rouge
 
 function renderBody(){
   const svg = document.getElementById('svg-body');
@@ -466,7 +469,7 @@ function collect(){
     FATIGUE: S.fatigue ? String(S.fatigue) : '',
     SOMMEIL: S.sommeil ? String(S.sommeil) : '',
     COURBATURES: S.courbatures ? String(S.courbatures) : '',
-    COMMENTAIRE: document.getElementById('in-com').value.trim(),
+    COMMENTAIRE: [document.getElementById('in-com').value.trim(), urlExtra && '[' + urlExtra + ']'].filter(Boolean).join(' '),
   };
 }
 
