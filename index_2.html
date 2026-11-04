@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Retour de séance — Merlin_prépa</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='13.7 1 38 38'><defs><linearGradient id='f' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ffffff' stop-opacity='.9'/><stop offset='.45' stop-color='%23C8102E'/><stop offset='1' stop-color='%238B0A20'/></linearGradient></defs><polygon points='36.27,2 25.47,22.7 31.77,22.7 28.17,38 39.87,15.5 33.57,15.5' fill='url(%23f)'/></svg>">
+<style>
+/* ============================================================
+   CONFIGURATION — colle ici le lien prérempli de ton Google Form
+   (généré avec NOM, SEANCE, DATE, FAIT, RPE, DUREE, DOULEUR, OU,
+   INTENSITE, QUAND, FATIGUE, SOMMEIL, COURBATURES, COMMENTAIRE comme réponses)
+   → voir la variable FORM_PREFILL_URL dans le <script> plus bas
+   ============================================================ */
+:root{
+  --bg:#0A0A0A; --card:#141414; --card2:#1C1C1C; --line:#2A2A2A; --ink:#EDEDED; --muted:#9A9A9A;
+  --red:#C8102E; --red2:#8B0A20; --redSoft:rgba(200,16,46,.14); --ok:#3FB37F;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;font-size:16px;line-height:1.4}
+body{padding:0 16px 120px;max-width:560px;margin:0 auto}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:2px solid var(--red);margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:18px;letter-spacing:-.01em}
+.brand-tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h1{font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:6px}
+h1 em{font-style:normal;color:var(--red)}
+.sub{color:var(--muted);font-size:14px;margin-bottom:22px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13px;color:#cfcfcf;background:var(--card);border-left:4px solid var(--red);padding:12px 14px;border-radius:0 6px 6px 0;margin-bottom:22px}
+.meta b{color:#E63946;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-right:5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 16px;margin-bottom:14px}
+.q{font-weight:700;font-size:16px;margin-bottom:4px}
+.q .req{color:var(--red)}
+.hint{font-size:12.5px;color:var(--muted);margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer;user-select:none;transition:all .12s}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff}
+.rpe{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.rpe button{aspect-ratio:1/1.25;border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:6px;font-size:15px;font-weight:800;cursor:pointer}
+.rpe button.on{color:#fff;border-color:transparent}
+.rpe-label{margin-top:10px;font-size:14px;min-height:20px;font-weight:600}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.scale button{border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:8px;padding:12px 0;font-size:16px;font-weight:800;cursor:pointer}
+.scale button.on{background:var(--red);border-color:var(--red);color:#fff}
+.scale-ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:6px}
+.wb{margin-bottom:16px}.wb:last-child{margin-bottom:0}
+.wb-t{font-size:14px;font-weight:700;margin-bottom:8px}
+input[type=text],input[type=number],textarea{width:100%;background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:12px;font:inherit;font-size:16px}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--red)}
+.hidden{display:none!important}
+
+/* ===== Bonhomme ===== */
+.body-wrap{display:flex;flex-direction:column;align-items:center}
+.view-toggle{display:flex;background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:3px;margin-bottom:10px}
+.view-toggle button{border:0;background:transparent;color:var(--muted);font-weight:700;font-size:13px;padding:8px 18px;border-radius:999px;cursor:pointer}
+.view-toggle button.on{background:var(--red);color:#fff}
+svg.body{width:100%;max-width:260px;height:auto;touch-action:manipulation}
+.zone{fill:#262626;stroke:#3A3A3A;stroke-width:1.2;cursor:pointer;transition:fill .15s}
+.zone:hover{fill:#333}
+.zone.sel{stroke:#fff;stroke-width:1.6}
+.side-lbl{fill:#666;font-size:11px;font-weight:800;font-family:inherit}
+.pain-list{width:100%;margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.pain-item{display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}
+.pain-dot{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#fff}
+.pain-txt{flex:1;min-width:0}
+.pain-name{font-weight:700;font-size:14px}
+.pain-det{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.empty-pain{font-size:13px;color:var(--muted);text-align:center;margin-top:6px}
+
+/* ===== Feuille zone ===== */
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;opacity:0;pointer-events:none;transition:opacity .2s}
+.sheet-bg.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:#111;border-top:3px solid var(--red);border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto;transform:translateY(105%);transition:transform .25s ease;max-height:88vh;overflow:auto}
+.sheet.open{transform:none}
+.sheet h3{font-size:20px;font-weight:800;margin-bottom:14px}
+.sheet .blk{margin-bottom:16px}
+.sheet .lbl{font-size:13px;font-weight:700;color:#cfcfcf;margin-bottom:8px}
+.int-row{display:flex;align-items:center;gap:14px}
+input[type=range]{flex:1;accent-color:var(--red);height:28px}
+.int-val{width:56px;text-align:center;font-size:22px;font-weight:800}
+.int-ends{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
+.sheet-actions{display:flex;gap:10px;margin-top:6px}
+.btn{flex:1;border:0;border-radius:10px;padding:15px;font-size:16px;font-weight:800;cursor:pointer}
+.btn-red{background:var(--red);color:#fff}
+.btn-ghost{background:var(--card2);color:var(--ink);border:1px solid var(--line)}
+
+/* ===== Envoi ===== */
+.submit-bar{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);z-index:10}
+.submit-bar .btn{display:block;width:100%;max-width:528px;margin:0 auto}
+.err{color:#ff6b7d;font-size:13px;text-align:center;margin-bottom:8px;min-height:0}
+.done{text-align:center;padding:60px 10px}
+.done .big{font-size:56px;margin-bottom:10px}
+.done h2{font-size:26px;font-weight:800;margin-bottom:8px}
+.done p{color:var(--muted)}
+.privacy{font-size:11.5px;color:#777;text-align:center;margin-top:18px}
+.preview{white-space:pre-wrap;font-family:ui-monospace,Menlo,monospace;font-size:12px;background:#000;border:1px dashed var(--red);border-radius:8px;padding:12px;margin-top:16px;text-align:left;color:#cfcfcf}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <svg class="mp-logo" viewBox="-68.6 1.2 138.3 50.1" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Merlin Prépa" style="height:42px;width:auto;display:block;"><defs><linearGradient id="mpLogoRet" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".9"/><stop offset="45%" stop-color="#C8102E"/><stop offset="100%" stop-color="#8B0A20"/></linearGradient></defs><g transform="translate(0 27.30) skewX(-4) translate(0 -27.30)">
+<g fill="#FFFFFF"><path d="M-66.25 31.640625H-59.875L-58.390625 22.640625C-58.09375 20.921875 -57.625 17.0625 -57.140625 13.75C-56.9375 17.1875 -56.578125 20.8125 -56.328125 22.640625L-55.0625 31.640625H-49.8125L-45.625 22.640625C-44.734375 20.75 -43.109375 16.890625 -41.78125 13.359375C-42.390625 16.75 -43.25 20.859375 -43.546875 22.640625L-45.03125 31.640625H-38.65625L-34.796875 8.359375H-44.78125L-48.046875 15.640625C-48.8125 17.34375 -50.125 20.921875 -51.15625 23.96875C-51.203125 20.921875 -51.328125 17.34375 -51.53125 15.640625L-52.421875 8.359375H-62.390625Z"/><path d="M-35.65625 31.640625H-18.9375L-18.09375 26.546875H-28.5L-27.8125 22.359375H-18.21875L-17.390625 17.390625H-26.984375L-26.328125 13.453125H-15.859375L-15.015625 8.359375H-31.796875Z"/><path d="M-15.75 31.640625H-9.4375L-8.171875 23.953125H-5.984375L-3.15625 31.640625H3.71875L0.40625 22.953125C3.09375 21.765625 4.953125 19.5 5.484375 16.265625C6.296875 11.328125 3.328125 8.359375 -1.859375 8.359375H-11.890625ZM-7.359375 19.046875 -6.421875 13.421875H-4.203125C-1.96875 13.421875 -0.78125 14.28125 -1.109375 16.265625C-1.4375 18.265625 -2.90625 19.046875 -5.140625 19.046875Z"/><path d="M5.625 31.640625H21.34375L22.1875 26.546875H12.78125L15.796875 8.359375H9.484375Z"/><path d="M41.71875 31.640625H48.21875L49.625 23.140625C49.875 21.609375 50.140625 19.046875 50.390625 16.375C51.09375 18.984375 51.65625 20.78125 52.703125 23.140625L56.46875 31.640625H63.34375L67.203125 8.359375H60.703125L59.28125 16.890625C59.0 18.59375 58.734375 21.453125 58.5 23.828125C57.96875 21.1875 57.328125 19.421875 56.484375 17.5L52.453125 8.359375H45.578125Z"/></g>
+<polygon points="36.27,2.00 25.47,22.70 31.77,22.70 28.17,38.00 39.87,15.50 33.57,15.50" fill="url(#mpLogoRet)"/>
+<g fill="#C8102E"><path d="M-33.5548828125 50.5927734375H-30.793164062499997L-30.294140624999997 47.5712890625H-28.762890624999997C-26.438671874999997 47.5712890625 -24.654492187499997 46.2041015625 -24.292187499999997 44.0166015625C-23.929882812499997 41.8427734375 -25.208203124999997 40.4072265625 -27.477734374999997 40.4072265625H-31.866406249999997ZM-29.938671874999997 45.4248046875 -29.473828124999997 42.6220703125H-28.503124999999997C-27.525585937499997 42.6220703125 -27.026562499999997 43.134765625 -27.176953124999997 44.0166015625C-27.320507812499997 44.8779296875 -27.990429687499997 45.4248046875 -28.967968749999997 45.4248046875Z"/><path d="M-19.47421875 50.5927734375H-16.7125L-16.1587890625 47.2294921875H-15.201757812499999L-13.964453124999999 50.5927734375H-10.956640624999999L-12.405859374999999 46.7919921875C-11.230078124999999 46.2724609375 -10.416601562499999 45.28125 -10.184179687499999 43.8662109375C-9.828710937499999 41.7060546875 -11.127539062499999 40.4072265625 -13.397070312499999 40.4072265625H-17.7857421875ZM-15.803320312499999 45.0830078125 -15.393164062499999 42.6220703125H-14.422460937499999C-13.444921874999999 42.6220703125 -12.925390624999999 42.998046875 -13.068945312499999 43.8662109375C-13.212499999999999 44.7412109375 -13.855078124999999 45.0830078125 -14.832617187499999 45.0830078125Z"/><path d="M-5.22265625 50.5927734375H2.091796875L2.4609375 48.3642578125H-2.091796875L-1.791015625 46.5322265625H2.40625L2.7685546875 44.3583984375H-1.4287109375L-1.1416015625 42.6357421875H3.4384765625L3.8076171875 40.4072265625H-3.5341796875ZM-0.6220703125 39.4638671875H1.1826171875L3.0419921875 37.2353515625H0.6904296875Z"/><path d="M8.386328124999999 50.5927734375H11.148046874999999L11.647070312499999 47.5712890625H13.178320312499999C15.502539062499999 47.5712890625 17.28671875 46.2041015625 17.6490234375 44.0166015625C18.011328125 41.8427734375 16.7330078125 40.4072265625 14.463476562499999 40.4072265625H10.074804687499999ZM12.002539062499999 45.4248046875 12.467382812499999 42.6220703125H13.438085937499999C14.415624999999999 42.6220703125 14.914648437499999 43.134765625 14.764257812499999 44.0166015625C14.620703124999999 44.8779296875 13.950781249999999 45.4248046875 12.973242187499999 45.4248046875Z"/><path d="M22.125195312499997 50.5927734375H25.324414062499997L26.206249999999997 48.6376953125H29.343945312499997L29.603710937499997 50.5927734375H32.6251953125L30.888867187499997 40.4072265625H27.115429687499997ZM27.135937499999997 46.5732421875C27.696484374999997 45.3291015625 28.209179687499997 43.99609375 28.708203124999997 42.669921875C28.797070312499997 43.99609375 28.906445312499997 45.3291015625 29.070507812499997 46.5732421875Z"/></g>
+</g></svg>
+  </div>
+  <div class="brand-tag">Retour de séance</div>
+</header>
+
+<main id="form-view">
+  <h1 id="hello">Comment s'est passée ta <em>séance</em> ?</h1>
+  <p class="sub">30 secondes pour m'aider à ajuster ton programme.</p>
+
+  <div class="meta" id="meta"></div>
+
+  <!-- Nom si absent du lien -->
+  <div class="card hidden" id="card-nom">
+    <div class="q">Ton nom <span class="req">*</span></div>
+    <input type="text" id="in-nom" autocomplete="name" placeholder="Prénom Nom">
+  </div>
+  <div class="card hidden" id="card-seance">
+    <div class="q">Quelle séance ?</div>
+    <div class="hint">Ex. « Semaine 3 – Séance 2 »</div>
+    <input type="text" id="in-seance" placeholder="Nom de la séance">
+  </div>
+
+  <div class="card">
+    <div class="q">As-tu fait la séance ? <span class="req">*</span></div>
+    <div class="chips" id="fait">
+      <div class="chip" data-v="En entier">✅ En entier</div>
+      <div class="chip" data-v="En partie">◐ En partie</div>
+      <div class="chip" data-v="Pas faite">✕ Pas faite</div>
+    </div>
+  </div>
+
+  <div id="bloc-effort">
+    <div class="card">
+      <div class="q">Difficulté globale (RPE) <span class="req">*</span></div>
+      <div class="hint">Ressenti sur l'ensemble de la séance, 0 = repos, 10 = effort maximal.</div>
+      <div class="rpe" id="rpe"></div>
+      <div class="rpe-label" id="rpe-label"></div>
+    </div>
+    <div class="card">
+      <div class="q">Durée réelle</div>
+      <div class="hint">En minutes, échauffement compris.</div>
+      <input type="number" id="in-duree" inputmode="numeric" min="0" max="300" placeholder="ex. 60">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="q">Une douleur pendant ou après ? <span class="req">*</span></div>
+    <div class="chips" id="douleur">
+      <div class="chip" data-v="Non">Non</div>
+      <div class="chip" data-v="Oui">Oui</div>
+    </div>
+    <div id="bloc-body" class="hidden" style="margin-top:16px">
+      <div class="hint" style="text-align:center">Touche la zone douloureuse sur le bonhomme (plusieurs possibles).</div>
+      <div class="body-wrap">
+        <div class="view-toggle">
+          <button data-view="front" class="on">Devant</button>
+          <button data-view="back">Dos</button>
+        </div>
+        <svg class="body" id="svg-body" viewBox="0 0 200 400"></svg>
+        <div class="pain-list" id="pain-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="q">Comment tu te sens ? <span class="req">*</span></div>
+    <div class="hint">1 = très mauvais · 5 = excellent</div>
+    <div class="wb"><div class="wb-t">⚡ Énergie / fatigue</div><div class="scale" data-k="fatigue"></div><div class="scale-ends"><span>Épuisé</span><span>En pleine forme</span></div></div>
+    <div class="wb"><div class="wb-t">😴 Sommeil (nuit dernière)</div><div class="scale" data-k="sommeil"></div><div class="scale-ends"><span>Très mauvais</span><span>Excellent</span></div></div>
+    <div class="wb"><div class="wb-t">🦵 Courbatures</div><div class="scale" data-k="courbatures"></div><div class="scale-ends"><span>Très fortes</span><span>Aucune</span></div></div>
+  </div>
+
+  <div class="card">
+    <div class="q">Un commentaire ?</div>
+    <div class="hint">Exercice trop dur / trop facile, charge utilisée, motivation, ce que tu veux.</div>
+    <textarea id="in-com" placeholder="Écris ici…"></textarea>
+  </div>
+
+  <p class="privacy">Tes réponses sont envoyées uniquement à ton coach, Merlin.</p>
+</main>
+
+<div class="done hidden" id="done-view">
+  <div class="big">💪</div>
+  <h2>Merci, c'est envoyé !</h2>
+  <p>Je regarde ça et j'ajuste la suite si besoin.</p>
+  <div id="preview" class="preview hidden"></div>
+</div>
+
+<div class="submit-bar" id="submit-bar">
+  <div class="err" id="err"></div>
+  <button class="btn btn-red" id="btn-send">Envoyer mon retour</button>
+</div>
+
+<!-- Feuille de détail d'une zone -->
+<div class="sheet-bg" id="sheet-bg"></div>
+<div class="sheet" id="sheet">
+  <h3 id="sh-title">Zone</h3>
+  <div class="blk">
+    <div class="lbl">Intensité de la douleur</div>
+    <div class="int-row"><input type="range" id="sh-int" min="1" max="10" step="1" value="3"><div class="int-val" id="sh-int-v">3</div></div>
+    <div class="int-ends"><span>1 · gêne légère</span><span>10 · insupportable</span></div>
+  </div>
+  <div class="blk">
+    <div class="lbl">Ça ressemble à quoi ?</div>
+    <div class="chips" id="sh-type">
+      <div class="chip" data-v="musculaire">Musculaire</div>
+      <div class="chip" data-v="articulaire">Articulaire</div>
+      <div class="chip" data-v="tendon">Tendon</div>
+      <div class="chip" data-v="choc / coup">Choc / coup</div>
+      <div class="chip" data-v="je ne sais pas">Je ne sais pas</div>
+    </div>
+  </div>
+  <div class="blk">
+    <div class="lbl">Quand ?</div>
+    <div class="chips" id="sh-quand">
+      <div class="chip" data-v="pendant">Pendant</div>
+      <div class="chip" data-v="juste après">Juste après</div>
+      <div class="chip" data-v="le lendemain">Le lendemain</div>
+      <div class="chip" data-v="déjà avant">Déjà avant</div>
+    </div>
+  </div>
+  <div class="blk">
+    <div class="lbl">Raison / précision</div>
+    <input type="text" id="sh-com" placeholder="ex. en descendant au squat, après le sprint…">
+  </div>
+  <div class="sheet-actions">
+    <button class="btn btn-ghost" id="sh-del">Retirer</button>
+    <button class="btn btn-red" id="sh-ok">Valider</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURATION
+   Colle entre les guillemets le lien prérempli de ton Google Form.
+   Laisse vide pour le mode démo (rien n'est envoyé, le résultat s'affiche).
+   ============================================================ */
+const FORM_PREFILL_URL = "https://docs.google.com/forms/d/e/1FAIpQLSc77cFUfLl3XsXyUwiQ3lFsCf4otF_tkT_VAyPQ2S03QdGlBg/viewform?usp=pp_url&entry.530919994=NOM&entry.1431028361=SEANCE&entry.2147439618=DATE&entry.1921594007=FAIS&entry.1170809077=RPE&entry.246022592=DUREE&entry.1604509008=DOULEUR&entry.1675088351=OU&entry.515281574=INTENSITE&entry.1627156994=QUAND&entry.453854884=FATIGUE&entry.1138559510=SOMMEIL&entry.1764769526=COURBATURES&entry.1568995521=COMMENTAIRES";
+
+const FIELDS = ['NOM','SEANCE','DATE','FAIT','RPE','DUREE','DOULEUR','OU','INTENSITE','QUAND','FATIGUE','SOMMEIL','COURBATURES','COMMENTAIRE'];
+
+// ---------- Paramètres de l'URL (envoyés par l'app) ----------
+const P = new URLSearchParams(location.search);
+const urlNom = (P.get('nom') || '').trim();
+const urlSeance = (P.get('seance') || '').trim();
+const urlDate = (P.get('date') || '').trim();
+
+const S = { fait:'', rpe:null, douleur:'', fatigue:null, sommeil:null, courbatures:null, pains:{} };
+
+// ---------- En-tête ----------
+(function initHeader(){
+  const prenom = urlNom.split(' ')[0];
+  if (prenom) document.getElementById('hello').innerHTML = `${esc(prenom)}, comment s'est passée ta <em>séance</em> ?`;
+  const meta = [];
+  if (urlSeance) meta.push(`<div><b>Séance</b>${esc(urlSeance)}</div>`);
+  if (urlDate) { const d = new Date(urlDate + 'T12:00:00'); if (!isNaN(d)) meta.push(`<div><b>Date</b>${d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}</div>`); }
+  const m = document.getElementById('meta');
+  if (meta.length) m.innerHTML = meta.join(''); else m.classList.add('hidden');
+  if (!urlNom) document.getElementById('card-nom').classList.remove('hidden');
+  if (!urlSeance) document.getElementById('card-seance').classList.remove('hidden');
+})();
+
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+// ---------- Chips simples ----------
+function chipGroup(id, onPick){
+  const el = document.getElementById(id);
+  el.addEventListener('click', e => {
+    const c = e.target.closest('.chip'); if (!c) return;
+    el.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === c));
+    onPick(c.dataset.v);
+  });
+  return v => el.querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x.dataset.v === v));
+}
+chipGroup('fait', v => { S.fait = v; document.getElementById('bloc-effort').classList.toggle('hidden', v === 'Pas faite'); });
+chipGroup('douleur', v => { S.douleur = v; document.getElementById('bloc-body').classList.toggle('hidden', v !== 'Oui'); });
+
+// ---------- RPE (échelle CR-10) ----------
+const RPE_LBL = ['Repos','Très très facile','Facile','Modéré','Un peu dur','Dur','Dur +','Très dur','Très dur +','Quasi maximal','Maximal'];
+function rpeColor(v){ // vert → orange → rouge
+  const h = 130 - v * 13; return `hsl(${h},70%,${v>=8?42:45}%)`;
+}
+(function initRpe(){
+  const el = document.getElementById('rpe');
+  for (let i = 0; i <= 10; i++) {
+    const b = document.createElement('button'); b.type='button'; b.textContent = i;
+    b.onclick = () => {
+      S.rpe = i;
+      el.querySelectorAll('button').forEach((x,j) => { x.classList.toggle('on', j===i); x.style.background = j===i ? rpeColor(i) : ''; });
+      const l = document.getElementById('rpe-label'); l.textContent = `${i} · ${RPE_LBL[i]}`; l.style.color = rpeColor(i);
+    };
+    el.appendChild(b);
+  }
+})();
+
+// ---------- Échelles 1–5 ----------
+document.querySelectorAll('.scale').forEach(el => {
+  const k = el.dataset.k;
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement('button'); b.type='button'; b.textContent = i;
+    b.onclick = () => { S[k] = i; el.querySelectorAll('button').forEach((x,j)=>x.classList.toggle('on', j===i-1)); };
+    el.appendChild(b);
+  }
+});
+
+// ---------- Bonhomme ----------
+// Vue de face : la gauche de l'écran = côté DROIT du client. Vue de dos : gauche de l'écran = côté GAUCHE.
+// Formes : [type, ...coords]  r = rect(x,y,w,h,rx)  c = cercle(cx,cy,r)  e = ellipse(cx,cy,rx,ry)
+const BODY = {
+  front: [
+    {id:'tete', n:'Tête / cou', s:['c',100,34,21]},
+    {id:'cou', n:'Cou', s:['r',91,55,18,13,4]},
+    {id:'epaule', n:'Épaule', pair:true, s:['e',64,84,15,12]},
+    {id:'pecs', n:'Pectoraux / thorax', s:['r',78,71,44,42,8]},
+    {id:'bras', n:'Bras (biceps)', pair:true, s:['r',47,98,15,48,7]},
+    {id:'coude', n:'Coude', pair:true, s:['c',54.5,155,8]},
+    {id:'avbras', n:'Avant-bras / poignet / main', pair:true, s:['r',46,165,15,62,7]},
+    {id:'abdos', n:'Abdos', s:['r',80,115,40,45,6]},
+    {id:'hanche', n:'Hanche / aine', pair:true, s:['r',78,162,21,24,6]},
+    {id:'quadri', n:'Cuisse avant (quadriceps)', pair:true, s:['r',77,188,22,72,9]},
+    {id:'genou', n:'Genou', pair:true, s:['c',88,271,11]},
+    {id:'tibia', n:'Tibia / avant de jambe', pair:true, s:['r',79,284,18,62,8]},
+    {id:'cheville', n:'Cheville / pied', pair:true, s:['r',77,349,22,30,7]},
+  ],
+  back: [
+    {id:'tete', n:'Tête / nuque', s:['c',100,34,21]},
+    {id:'nuque', n:'Nuque', s:['r',91,55,18,13,4]},
+    {id:'epaule', n:'Épaule (arrière)', pair:true, s:['e',64,84,15,12]},
+    {id:'hautdos', n:'Haut du dos / trapèzes', s:['r',78,71,44,42,8]},
+    {id:'bras', n:'Bras (triceps)', pair:true, s:['r',47,98,15,48,7]},
+    {id:'coude', n:'Coude', pair:true, s:['c',54.5,155,8]},
+    {id:'avbras', n:'Avant-bras / poignet / main', pair:true, s:['r',46,165,15,62,7]},
+    {id:'lombaires', n:'Bas du dos / lombaires', s:['r',80,115,40,45,6]},
+    {id:'fessier', n:'Fessier', pair:true, s:['r',78,162,21,28,8]},
+    {id:'ischio', n:'Cuisse arrière (ischios)', pair:true, s:['r',77,192,22,68,9]},
+    {id:'genou', n:'Arrière du genou', pair:true, s:['c',88,271,11]},
+    {id:'mollet', n:'Mollet', pair:true, s:['r',79,284,18,58,8]},
+    {id:'achille', n:"Tendon d'Achille / talon", pair:true, s:['r',77,345,22,34,7]},
+  ]
+};
+let curView = 'front';
+
+function zoneKey(view, z, side){ return `${view}:${z.id}${side?':'+side:''}`; }
+function sideWord(z, side){
+  if (!side) return z.n;
+  const fem = /^(Épaule|Hanche|Cuisse|Cheville)/.test(z.n); // accord : épaule droite, genou droit
+  return `${z.n} ${side === 'd' ? (fem ? 'droite' : 'droit') : 'gauche'}`;
+}
+
+function shapeSvg(s, mirror, attrs, title){
+  const X = x => mirror ? 200 - x : x;
+  const t = `<title>${esc(title)}</title>`;
+  if (s[0]==='c') return `<circle cx="${X(s[1])}" cy="${s[2]}" r="${s[3]}" ${attrs}>${t}</circle>`;
+  if (s[0]==='e') return `<ellipse cx="${X(s[1])}" cy="${s[2]}" rx="${s[3]}" ry="${s[4]}" ${attrs}>${t}</ellipse>`;
+  const [ ,x,y,w,h,rx] = s; const nx = mirror ? 200 - x - w : x;
+  return `<rect x="${nx}" y="${y}" width="${w}" height="${h}" rx="${rx}" ${attrs}>${t}</rect>`;
+}
+
+function painColor(i){ return rpeColor(Math.min(10, i)); }
+
+function renderBody(){
+  const svg = document.getElementById('svg-body');
+  let html = '';
+  BODY[curView].forEach(z => {
+    const sides = z.pair ? ['L','R'] : [null];
+    sides.forEach(scr => {
+      // côté réel du client selon la vue
+      let side = null;
+      if (scr) side = curView === 'front' ? (scr==='L' ? 'd' : 'g') : (scr==='L' ? 'g' : 'd');
+      const key = zoneKey(curView, z, side);
+      const p = S.pains[key];
+      const attrs = `class="zone${p ? ' sel' : ''}" data-key="${key}"${p ? ` style="fill:${painColor(p.int)}"` : ''}`;
+      html += shapeSvg(z.s, scr === 'R', attrs, sideWord(z, side));
+    });
+  });
+  const L = curView === 'front' ? 'D' : 'G', R = curView === 'front' ? 'G' : 'D';
+  html += `<text class="side-lbl" x="14" y="200" text-anchor="middle">${L}</text><text class="side-lbl" x="186" y="200" text-anchor="middle">${R}</text>`;
+  svg.innerHTML = html;
+  svg.querySelectorAll('.zone').forEach(el => el.addEventListener('click', () => openSheet(el.dataset.key)));
+}
+
+function zoneFromKey(key){
+  const [view, id, side] = key.split(':');
+  const z = BODY[view].find(x => x.id === id);
+  return { view, z, side: side || null, label: sideWord(z, side || null) };
+}
+
+document.querySelectorAll('.view-toggle button').forEach(b => b.onclick = () => {
+  curView = b.dataset.view;
+  document.querySelectorAll('.view-toggle button').forEach(x => x.classList.toggle('on', x === b));
+  renderBody();
+});
+
+// ---------- Feuille de détail ----------
+let editKey = null;
+const shInt = document.getElementById('sh-int');
+shInt.oninput = () => { const v = +shInt.value; const el = document.getElementById('sh-int-v'); el.textContent = v; el.style.color = painColor(v); };
+let shType = '', shQuand = '';
+const setType = chipGroup('sh-type', v => shType = v);
+const setQuand = chipGroup('sh-quand', v => shQuand = v);
+
+function openSheet(key){
+  editKey = key;
+  const info = zoneFromKey(key);
+  const p = S.pains[key] || { int:3, type:'', quand:'', com:'' };
+  document.getElementById('sh-title').textContent = info.label;
+  shInt.value = p.int; shInt.oninput();
+  shType = p.type; setType(p.type);
+  shQuand = p.quand; setQuand(p.quand);
+  document.getElementById('sh-com').value = p.com;
+  document.getElementById('sh-del').classList.toggle('hidden', !S.pains[key]);
+  document.getElementById('sheet').classList.add('open');
+  document.getElementById('sheet-bg').classList.add('open');
+}
+function closeSheet(){
+  document.getElementById('sheet').classList.remove('open');
+  document.getElementById('sheet-bg').classList.remove('open');
+  editKey = null;
+}
+document.getElementById('sheet-bg').onclick = closeSheet;
+document.getElementById('sh-ok').onclick = () => {
+  S.pains[editKey] = { int:+shInt.value, type:shType, quand:shQuand, com:document.getElementById('sh-com').value.trim() };
+  closeSheet(); renderBody(); renderPainList();
+};
+document.getElementById('sh-del').onclick = () => { delete S.pains[editKey]; closeSheet(); renderBody(); renderPainList(); };
+
+function painDetail(p){ return [ `${p.int}/10`, p.type, p.quand, p.com && `« ${p.com} »` ].filter(Boolean).join(' · '); }
+
+function renderPainList(){
+  const el = document.getElementById('pain-list');
+  const keys = Object.keys(S.pains);
+  if (!keys.length) { el.innerHTML = '<div class="empty-pain">Aucune zone sélectionnée</div>'; return; }
+  el.innerHTML = keys.map(k => {
+    const p = S.pains[k]; const info = zoneFromKey(k);
+    return `<div class="pain-item" data-key="${k}"><div class="pain-dot" style="background:${painColor(p.int)}">${p.int}</div><div class="pain-txt"><div class="pain-name">${esc(info.label)}</div><div class="pain-det">${esc(painDetail(p).replace(/^\d+\/10 · ?/,'') || 'Touche pour préciser')}</div></div><span style="color:var(--muted)">›</span></div>`;
+  }).join('');
+  el.querySelectorAll('.pain-item').forEach(it => it.onclick = () => openSheet(it.dataset.key));
+}
+
+renderBody(); renderPainList();
+
+// ---------- Envoi ----------
+function collect(){
+  const nom = urlNom || document.getElementById('in-nom').value.trim();
+  const seance = urlSeance || document.getElementById('in-seance').value.trim();
+  const pains = S.douleur === 'Oui' ? Object.keys(S.pains).map(k => ({ label: zoneFromKey(k).label, ...S.pains[k] })) : [];
+  const done = S.fait !== 'Pas faite';
+  return {
+    NOM: nom,
+    SEANCE: seance,
+    DATE: urlDate || new Date().toISOString().slice(0,10),
+    FAIT: S.fait,
+    RPE: done && S.rpe !== null ? String(S.rpe) : '',
+    DUREE: done ? document.getElementById('in-duree').value.trim() : '',
+    DOULEUR: pains.length ? 'Oui' : 'Non',
+    OU: pains.map(p => `${p.label} (${painDetail(p)})`).join(' | '),
+    INTENSITE: pains.length ? String(Math.max(...pains.map(p => p.int))) : '',
+    QUAND: [...new Set(pains.map(p => p.quand).filter(Boolean))].join(', '),
+    FATIGUE: S.fatigue ? String(S.fatigue) : '',
+    SOMMEIL: S.sommeil ? String(S.sommeil) : '',
+    COURBATURES: S.courbatures ? String(S.courbatures) : '',
+    COMMENTAIRE: document.getElementById('in-com').value.trim(),
+  };
+}
+
+function validate(d){
+  if (!d.NOM) return 'Indique ton nom.';
+  if (!d.FAIT) return 'Dis-moi si tu as fait la séance.';
+  if (d.FAIT !== 'Pas faite' && d.RPE === '') return 'Choisis ta difficulté (RPE).';
+  if (!S.douleur) return 'Réponds à la question sur la douleur.';
+  if (S.douleur === 'Oui' && !Object.keys(S.pains).length) return 'Touche la zone douloureuse sur le bonhomme.';
+  if (!d.FATIGUE || !d.SOMMEIL || !d.COURBATURES) return 'Remplis les 3 questions « Comment tu te sens ».';
+  return '';
+}
+
+// Lit le lien prérempli : repère le champ entry.XXX correspondant à chaque mot-clé
+function formTarget(){
+  if (!FORM_PREFILL_URL) return null;
+  try {
+    const u = new URL(FORM_PREFILL_URL);
+    const map = {};
+    // variantes acceptées (FAIS = FAIT, COMMENTAIRES = COMMENTAIRE, OÙ = OU…)
+    const ALIAS = { FAIS:'FAIT', 'OÙ':'OU', COMMENTAIRES:'COMMENTAIRE', 'SÉANCE':'SEANCE', 'DURÉE':'DUREE', 'INTENSITÉ':'INTENSITE' };
+    for (const [k, v] of u.searchParams.entries()) {
+      if (!k.startsWith('entry.')) continue;
+      const key = ALIAS[v.trim().toUpperCase()] || v.trim().toUpperCase();
+      if (FIELDS.includes(key)) map[key] = k;
+    }
+    const action = u.origin + u.pathname.replace(/\/viewform.*$/, '/formResponse');
+    return { action, map };
+  } catch (e) { return null; }
+}
+
+document.getElementById('btn-send').onclick = async () => {
+  const d = collect();
+  const errEl = document.getElementById('err');
+  const msg = validate(d);
+  errEl.textContent = msg;
+  if (msg) return;
+  const btn = document.getElementById('btn-send');
+  btn.disabled = true; btn.textContent = 'Envoi…';
+  const t = formTarget();
+  try {
+    if (t) {
+      const body = new URLSearchParams();
+      FIELDS.forEach(f => { if (t.map[f]) body.append(t.map[f], d[f]); });
+      // Google Forms n'autorise pas la lecture de la réponse : mode no-cors (l'envoi passe quand même)
+      await fetch(t.action, { method:'POST', mode:'no-cors', body });
+    } else {
+      const pv = document.getElementById('preview');
+      pv.textContent = 'MODE DÉMO — rien n\'a été envoyé.\nVoici la ligne qui arriverait dans ton Google Sheet :\n\n' + FIELDS.map(f => `${f.padEnd(12)} ${d[f]}`).join('\n');
+      pv.classList.remove('hidden');
+    }
+    document.getElementById('form-view').classList.add('hidden');
+    document.getElementById('submit-bar').classList.add('hidden');
+    document.getElementById('done-view').classList.remove('hidden');
+    window.scrollTo(0, 0);
+  } catch (e) {
+    errEl.textContent = 'Envoi impossible — vérifie ta connexion et réessaie.';
+    btn.disabled = false; btn.textContent = 'Envoyer mon retour';
+  }
+};
+</script>
+</body>
+</html>
