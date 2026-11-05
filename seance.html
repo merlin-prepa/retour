@@ -8,10 +8,11 @@
 <title>Ta séance — Merlin_prépa</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='13.7 1 38 38'><defs><linearGradient id='f' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23ffffff' stop-opacity='.9'/><stop offset='.45' stop-color='%23C8102E'/><stop offset='1' stop-color='%238B0A20'/></linearGradient></defs><polygon points='36.27,2 25.47,22.7 31.77,22.7 28.17,38 39.87,15.5 33.57,15.5' fill='url(%23f)'/></svg>">
 <style>
-:root{--bg:#0A0A0A;--card:#141414;--card2:#1C1C1C;--line:#2A2A2A;--ink:#EDEDED;--muted:#9A9A9A;--red:#C8102E;--red2:#8B0A20;--ok:#3FB37F}
+:root{--bg:#0A0A0A;--card:#141414;--card2:#1C1C1C;--line:#2A2A2A;--ink:#EDEDED;--muted:#9A9A9A;--red:#C8102E;--red2:#8B0A20;--ok:#3FB37F;--water:#38A8F5;--water2:#1565C0}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;font-size:16px;line-height:1.4}
-body{padding:0 16px 140px;max-width:620px;margin:0 auto}
+body{padding:0 16px 60px;max-width:620px;margin:0 auto}
+body.lock{overflow:hidden}
 header{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:2px solid var(--red)}
 .brand-tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .progress{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 12px;margin-bottom:6px}
@@ -27,8 +28,11 @@ h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.08;margin:
 .section-meta{margin-left:auto;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .bloc{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden}
 .bloc-label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:linear-gradient(90deg,var(--red2),transparent);padding:7px 14px}
+.bloc-info{font-size:12.5px;color:#cfcfcf;padding:8px 14px 0;display:flex;flex-wrap:wrap;gap:6px}
+.bloc-info span{background:var(--card2);border-radius:4px;padding:3px 8px}
+.bloc-info b{color:#fff}
 .exo{padding:14px;border-top:1px solid var(--line)}
-.exo:first-of-type{border-top:0}
+.bloc-label + .exo, .bloc-info + .exo{border-top:0}
 .exo.done{opacity:.55}
 .exo-top{display:flex;gap:12px}
 .exo-img{flex-shrink:0;width:92px;height:72px;border-radius:6px;background:#fff center/cover no-repeat;cursor:zoom-in}
@@ -39,23 +43,17 @@ h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.08;margin:
 .spec{background:var(--card2);border-radius:4px;padding:3px 7px;font-size:12px;color:#cfcfcf}
 .spec b{color:#fff}
 .notes{font-size:13px;color:#bbb;margin-top:8px;border-left:2px solid var(--red);padding-left:8px}
-.video{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:13px;font-weight:700;color:#fff;background:var(--red);border-radius:6px;padding:7px 12px;text-decoration:none}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.video,.work-btn{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;border-radius:6px;padding:8px 12px;text-decoration:none;border:0;cursor:pointer}
+.video{background:var(--red)}
+.work-btn{background:#2a2a2a;border:1px solid #444}
 .sets{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .set{min-width:48px;padding:10px 8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;text-align:center}
 .set.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.set.next{border-color:var(--red);box-shadow:0 0 0 1px var(--red) inset}
 .load{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;color:var(--muted)}
 .load input{width:110px;background:var(--card2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font:inherit;font-size:15px}
 .load input:focus{outline:none;border-color:var(--red)}
-/* chrono */
-.timer{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#111;border-top:3px solid var(--red);padding:12px 16px calc(12px + env(safe-area-inset-bottom));transform:translateY(110%);transition:transform .25s}
-.timer.open{transform:none}
-.timer-in{max-width:620px;margin:0 auto;display:flex;align-items:center;gap:12px}
-.timer-lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.timer-val{font-size:38px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
-.timer-val.end{color:var(--ok)}
-.timer-btns{margin-left:auto;display:flex;gap:6px}
-.tbtn{border:1px solid var(--line);background:var(--card2);color:var(--ink);border-radius:8px;padding:10px 12px;font-weight:700;font-size:14px;cursor:pointer}
-.tbtn.red{background:var(--red);border-color:var(--red);color:#fff}
 .finish{display:block;width:100%;margin:26px 0 8px;border:0;border-radius:10px;padding:16px;font-size:17px;font-weight:800;background:var(--red);color:#fff;cursor:pointer;text-align:center;text-decoration:none}
 .finish-sub{text-align:center;font-size:12.5px;color:var(--muted)}
 .state{text-align:center;padding:80px 10px;color:var(--muted)}
@@ -63,6 +61,36 @@ h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.08;margin:
 .zoom{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:16px}
 .zoom.open{display:flex}
 .zoom img{max-width:100%;max-height:100%;border-radius:8px;background:#fff}
+
+/* ===== Écran chrono (récup / effort) ===== */
+.ov{position:fixed;inset:0;z-index:40;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px 20px calc(24px + env(safe-area-inset-bottom));text-align:center;background:radial-gradient(circle at 50% 35%,#0f2a44 0%,#07121f 55%,#050a12 100%)}
+.ov.open{display:flex}
+.ov.work{background:radial-gradient(circle at 50% 35%,#4a0d18 0%,#1d060b 55%,#0b0204 100%)}
+.ov.go{background:radial-gradient(circle at 50% 35%,#0f4a2e 0%,#06210f 60%,#020a05 100%)}
+.ov-kicker{font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.ov-title{font-size:44px;font-weight:900;letter-spacing:-.02em;line-height:1;color:#fff;text-shadow:0 4px 24px rgba(56,168,245,.45)}
+.ov.work .ov-title{text-shadow:0 4px 24px rgba(200,16,46,.6)}
+.ov-visual{position:relative;width:230px;height:230px;margin:6px 0}
+.ov-ring{position:absolute;inset:0;transform:rotate(-90deg)}
+.ov-ring circle{fill:none;stroke-width:9}
+.ov-ring .bg{stroke:rgba(255,255,255,.08)}
+.ov-ring .fg{stroke:var(--water);stroke-linecap:round;transition:stroke-dashoffset .25s linear}
+.ov.work .ov-ring .fg{stroke:var(--red)}
+.ov.go .ov-ring .fg{stroke:var(--ok)}
+.ov-icon{position:absolute;inset:34px;display:flex;align-items:center;justify-content:center}
+.ov-icon svg{height:100%;width:auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+.ov-time{font-size:64px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;color:#fff}
+.ov-tip{font-size:14px;color:rgba(255,255,255,.75);min-height:20px}
+.ov-next{margin-top:6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 14px;max-width:360px;width:100%}
+.ov-next-l{font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55)}
+.ov-next-v{font-size:15px;font-weight:700;color:#fff;margin-top:2px}
+.ov-btns{display:flex;gap:8px;margin-top:10px}
+.ov-btn{border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;border-radius:10px;padding:12px 16px;font-weight:800;font-size:15px;cursor:pointer;min-width:70px}
+.ov-btn.main{background:#fff;color:#0A0A0A;border-color:#fff}
+.wave{animation:wave 2.4s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:translateX(0)}50%{transform:translateX(-6px)}}
+.pulse{animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 </style>
 </head>
 <body>
@@ -77,17 +105,21 @@ h1{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1.08;margin:
 
 <div id="app"><div class="state"><h2>Chargement…</h2><p>Ta séance arrive.</p></div></div>
 
-<div class="timer" id="timer">
-  <div class="timer-in">
-    <div>
-      <div class="timer-lbl" id="timer-lbl">Repos</div>
-      <div class="timer-val" id="timer-val">0:00</div>
-    </div>
-    <div class="timer-btns">
-      <button class="tbtn" id="t-minus">−15</button>
-      <button class="tbtn" id="t-plus">+15</button>
-      <button class="tbtn red" id="t-skip">OK</button>
-    </div>
+<!-- Écran chrono -->
+<div class="ov" id="ov">
+  <div class="ov-kicker" id="ov-kicker">Temps de repos</div>
+  <div class="ov-title" id="ov-title">Récup !</div>
+  <div class="ov-visual">
+    <svg class="ov-ring" viewBox="0 0 230 230"><circle class="bg" cx="115" cy="115" r="106"/><circle class="fg" id="ov-ring" cx="115" cy="115" r="106"/></svg>
+    <div class="ov-icon" id="ov-icon"></div>
+  </div>
+  <div class="ov-time" id="ov-time">0:00</div>
+  <div class="ov-tip" id="ov-tip"></div>
+  <div class="ov-next" id="ov-next"><div class="ov-next-l">Ensuite</div><div class="ov-next-v" id="ov-next-v"></div></div>
+  <div class="ov-btns">
+    <button class="ov-btn" id="ov-minus">−15</button>
+    <button class="ov-btn" id="ov-plus">+15</button>
+    <button class="ov-btn main" id="ov-skip">Passer</button>
   </div>
 </div>
 <div class="zoom" id="zoom"><img alt=""></div>
@@ -100,8 +132,8 @@ const RETOUR_URL = "index.html";          // page de retour (même dossier)
 
 const id = new URLSearchParams(location.search).get('id') || '';
 const KEY = 'mp-seance-' + id;
-let S = null;                 // séance
-let P = { sets:{}, loads:{} };// progression (gardée sur le téléphone)
+let S = null;
+let P = { sets:{}, loads:{} };
 
 function esc(s){return String(s ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function loadP(){ try { const x = JSON.parse(localStorage.getItem(KEY)); if (x) P = Object.assign({sets:{},loads:{}}, x); } catch(e){} }
@@ -127,9 +159,42 @@ async function init(){
 }
 function fail(t, m){ document.getElementById('app').innerHTML = `<div class="state"><h2>${esc(t)}</h2><p>${esc(m)}</p></div>`; }
 
-function specsHtml(x){
+// ---------- Structure : blocs, circuits, étapes ----------
+const isCircuit = b => b.type === 'circuit';
+function nbSets(b, x){
+  if (isCircuit(b)) { const t = parseInt(b.tours, 10); return t > 0 && t <= 20 ? t : 1; }
+  const n = parseInt(x.series, 10); return n > 0 && n <= 20 ? n : 1;
+}
+// Ordre réel d'exécution : en super-set / circuit on fait un tour de tous les exos, puis le tour suivant
+function steps(){
   const out = [];
-  if (x.series) out.push(`<b>${esc(x.series)}</b> séries`);
+  (S.sections||[]).forEach((sec,si) => sec.blocs.forEach((b,bi) => {
+    if (b.exos.length > 1) {
+      const max = Math.max(...b.exos.map(x => nbSets(b,x)));
+      for (let r = 0; r < max; r++) b.exos.forEach((x,ei) => { if (r < nbSets(b,x)) out.push({si,bi,ei,i:r,b,x,k:`${si}-${bi}-${ei}`}); });
+    } else b.exos.forEach((x,ei) => { for (let r = 0; r < nbSets(b,x); r++) out.push({si,bi,ei,i:r,b,x,k:`${si}-${bi}-${ei}`}); });
+  }));
+  return out;
+}
+function counts(){ const st = steps(); return { tot: st.length, done: st.filter(s => P.sets[s.k+'-'+s.i]).length }; }
+function nextStep(after){
+  const st = steps();
+  let start = 0;
+  if (after) { const idx = st.findIndex(s => s.k === after.k && s.i === after.i); start = idx + 1; }
+  for (let j = start; j < st.length; j++) if (!P.sets[st[j].k+'-'+st[j].i]) return st[j];
+  for (let j = 0; j < start; j++) if (!P.sets[st[j].k+'-'+st[j].i]) return st[j];
+  return null;
+}
+function stepLabel(s){
+  if (!s) return 'Fin de la séance 🎉';
+  const n = nbSets(s.b, s.x);
+  const unit = isCircuit(s.b) ? 'tour' : 'série';
+  return `${s.x.num} · ${s.x.nom}${n > 1 ? ` — ${unit} ${s.i+1}/${n}` : ''}`;
+}
+
+function specsHtml(b, x){
+  const out = [];
+  if (x.series && !isCircuit(b)) out.push(`<b>${esc(x.series)}</b> séries`);
   if (x.reps) out.push(`<b>${esc(x.reps)}</b>${x.repsUnit ? ' ' + esc(x.repsUnit) : ' reps'}`);
   if (x.charge) out.push(`<b>${esc(x.charge)}</b> ${esc(x.chargeUnit || 'kg')}`);
   if (x.repos) out.push(`repos <b>${esc(x.repos)}</b>`);
@@ -138,9 +203,14 @@ function specsHtml(x){
   return out.map(t => `<span class="spec">${t}</span>`).join('');
 }
 
-function nbSets(x){ const n = parseInt(x.series, 10); return n > 0 && n <= 20 ? n : 1; }
-function allExos(){ const l = []; (S.sections||[]).forEach((sec,si)=>sec.blocs.forEach((b,bi)=>b.exos.forEach((x,ei)=>l.push({x, k:`${si}-${bi}-${ei}`})))); return l; }
-function counts(){ let tot=0, done=0; allExos().forEach(({x,k})=>{ const n=nbSets(x); tot+=n; for(let i=0;i<n;i++) if(P.sets[k+'-'+i]) done++; }); return {tot,done}; }
+// Durée de l'effort pour les exos chronométrés (ex. gainage 30 s)
+function workSeconds(x){
+  const v = parseFloat(String(x.reps || '').replace(',', '.'));
+  if (x.repsUnit === 's' && v > 0) return Math.round(v);
+  if (x.repsUnit === 'min' && v > 0) return Math.round(v * 60);
+  if (!x.repsUnit) { const r = parseRest(x.reps); if (r && /["'s]|min/.test(String(x.reps))) return r; }
+  return 0;
+}
 
 function render(){
   document.title = (S.titre || 'Ta séance') + ' — Merlin_prépa';
@@ -160,12 +230,17 @@ function render(){
     const nb = sec.blocs.reduce((a,b)=>a+b.exos.length,0);
     html += `<div class="section"><div class="section-dot"></div><div class="section-title">${esc(sec.title)}</div><div class="section-meta">${nb} exercice${nb>1?'s':''}</div></div>`;
     sec.blocs.forEach((b, bi) => {
-      html += `<div class="bloc"><div class="bloc-label">${esc(b.nom || 'Bloc ' + b.label)}${b.exos.length > 1 ? ' · Super-set' : ''}</div>`;
+      const circ = isCircuit(b);
+      const kind = circ ? 'Circuit' : (b.exos.length > 1 ? 'Super-set' : '');
+      html += `<div class="bloc"><div class="bloc-label">${esc(b.nom || (circ ? 'Circuit ' : 'Bloc ') + b.label)}${kind && !(b.nom||'').toLowerCase().includes(kind.toLowerCase()) ? ' · ' + kind : ''}</div>`;
+      if (circ) html += `<div class="bloc-info"><span><b>${nbSets(b, b.exos[0])}</b> tours</span>${b.reposTour ? `<span>repos entre tours <b>${esc(b.reposTour)}</b></span>` : ''}<span>enchaîne les exos dans l'ordre</span></div>`;
       b.exos.forEach((x, ei) => {
-        const k = `${si}-${bi}-${ei}`, n = nbSets(x);
+        const k = `${si}-${bi}-${ei}`, n = nbSets(b, x);
+        const unit = circ ? 'Tour' : 'Série';
         let sets = '';
-        for (let i = 0; i < n; i++) sets += `<button class="set${P.sets[k+'-'+i]?' on':''}" data-k="${k}" data-i="${i}">${n>1?'Série '+(i+1):'Fait'}</button>`;
-        const showLoad = x.chargeUnit !== '%' && x.chargeUnit !== 'BPM';
+        for (let i = 0; i < n; i++) sets += `<button class="set${P.sets[k+'-'+i]?' on':''}" data-k="${k}" data-i="${i}">${n>1? unit + ' ' + (i+1) : 'Fait'}</button>`;
+        const showLoad = x.chargeUnit !== '%' && x.chargeUnit !== 'BPM' && x.chargeUnit !== 'W' && !workSeconds(x);
+        const ws = workSeconds(x);
         html += `
           <div class="exo" id="exo-${k}">
             <div class="exo-top">
@@ -173,11 +248,14 @@ function render(){
               <div style="min-width:0">
                 <div class="exo-num">${esc(x.num)}</div>
                 <div class="exo-name">${esc(x.nom)}</div>
-                <div class="specs">${specsHtml(x)}</div>
+                <div class="specs">${specsHtml(b, x)}</div>
               </div>
             </div>
             ${x.notes ? `<div class="notes">${esc(x.notes)}</div>` : ''}
-            ${x.video ? `<a class="video" href="${esc(x.video)}" target="_blank" rel="noopener">▶ Voir la vidéo</a>` : ''}
+            ${(x.video || ws) ? `<div class="actions">
+              ${ws ? `<button class="work-btn" data-work="${k}">⏱ Lancer ${fmt(ws)}</button>` : ''}
+              ${x.video ? `<a class="video" href="${esc(x.video)}" target="_blank" rel="noopener">▶ Voir la vidéo</a>` : ''}
+            </div>` : ''}
             <div class="sets">${sets}</div>
             ${showLoad ? `<div class="load">Charge utilisée <input type="text" inputmode="decimal" data-load="${k}" value="${esc(P.loads[k]||'')}" placeholder="${esc(x.charge ? x.charge + ' ' + (x.chargeUnit||'kg') : 'ex. 40 kg')}"></div>` : ''}
           </div>`;
@@ -188,30 +266,44 @@ function render(){
   html += `<a class="finish" id="finish" href="#">Terminer la séance →</a><div class="finish-sub">Puis donne-moi ton ressenti en 30 secondes.</div>`;
   document.getElementById('app').innerHTML = html;
 
-  document.querySelectorAll('.set').forEach(b => b.onclick = () => toggleSet(b));
+  document.querySelectorAll('.set').forEach(b => b.onclick = () => toggleSet(b.dataset.k, +b.dataset.i));
+  document.querySelectorAll('[data-work]').forEach(b => b.onclick = () => startWork(b.dataset.work));
   document.querySelectorAll('[data-load]').forEach(inp => inp.oninput = () => { P.loads[inp.dataset.load] = inp.value.trim(); saveP(); });
   document.querySelectorAll('.exo-img[data-img]').forEach(el => el.onclick = () => { const z = document.getElementById('zoom'); z.querySelector('img').src = el.dataset.img; z.classList.add('open'); });
   document.getElementById('finish').onclick = finish;
   updateProgress();
 }
 
-function toggleSet(b){
-  const k = b.dataset.k, key = k + '-' + b.dataset.i;
-  P.sets[key] = !P.sets[key];
-  b.classList.toggle('on', P.sets[key]);
-  saveP(); updateProgress();
-  if (P.sets[key]) {
-    const [si,bi,ei] = k.split('-').map(Number);
-    const bloc = S.sections[si].blocs[bi];
-    const x = bloc.exos[ei];
-    // super-set : le repos se lance après le dernier exo du bloc
-    const last = ei === bloc.exos.length - 1;
-    const sec = parseRest(x.repos || (last ? bloc.exos.map(e=>e.repos).find(Boolean) : ''));
-    if (sec && (last || bloc.exos.length === 1)) startTimer(sec, x.nom);
-    if (bloc.exos.length > 1 && !last) { // passer à l'exo suivant du super-set
-      const nx = document.getElementById(`exo-${si}-${bi}-${ei+1}`); if (nx) nx.scrollIntoView({behavior:'smooth', block:'center'});
-    }
+function stepFor(k, i){ const [si,bi,ei] = k.split('-').map(Number); const b = S.sections[si].blocs[bi]; return {si,bi,ei,i,b,x:b.exos[ei],k}; }
+
+// Repos à faire après une étape
+function restAfter(s){
+  const b = s.b, last = s.ei === b.exos.length - 1;
+  if (isCircuit(b)) {
+    if (!last) return { sec: parseRest(s.x.repos), kind: 'exo' };
+    const lastTour = s.i >= nbSets(b, s.x) - 1;
+    if (lastTour) return { sec: parseRest(s.x.repos), kind: 'fin' };
+    return { sec: parseRest(b.reposTour) || parseRest(s.x.repos), kind: 'tour' };
   }
+  if (b.exos.length > 1) {                       // super-set
+    if (s.x.repos) return { sec: parseRest(s.x.repos), kind: last ? 'tour' : 'exo' };
+    if (last) return { sec: parseRest(b.exos.map(e => e.repos).find(Boolean)), kind: 'tour' };
+    return { sec: 0, kind: 'exo' };              // enchaîner sans repos
+  }
+  return { sec: parseRest(s.x.repos), kind: 'serie' };
+}
+
+function toggleSet(k, i, fromWork){
+  const key = k + '-' + i;
+  P.sets[key] = !P.sets[key];
+  document.querySelectorAll(`.set[data-k="${k}"][data-i="${i}"]`).forEach(b => b.classList.toggle('on', P.sets[key]));
+  saveP(); updateProgress(); keepAwake();
+  if (!P.sets[key]) return;
+  const s = stepFor(k, i);
+  const nx = nextStep(s);
+  const rest = restAfter(s);
+  if (rest.sec && nx) startRest(rest.sec, nx, rest.kind);
+  else if (nx) { const el = document.getElementById('exo-' + nx.k); if (el && nx.k !== k) el.scrollIntoView({behavior:'smooth', block:'center'}); }
 }
 
 function updateProgress(){
@@ -220,7 +312,13 @@ function updateProgress(){
   document.getElementById('pg-txt').textContent = `${done} / ${tot} séries`;
   document.getElementById('pg-pct').textContent = pct + ' %';
   document.getElementById('pg-bar').style.width = pct + '%';
-  allExos().forEach(({x,k}) => { const n = nbSets(x); let ok = true; for (let i=0;i<n;i++) if(!P.sets[k+'-'+i]) ok=false; const el = document.getElementById('exo-'+k); if (el) el.classList.toggle('done', ok); });
+  const st = steps();
+  const byExo = {};
+  st.forEach(s => { byExo[s.k] = byExo[s.k] || []; byExo[s.k].push(!!P.sets[s.k+'-'+s.i]); });
+  Object.entries(byExo).forEach(([k, arr]) => { const el = document.getElementById('exo-'+k); if (el) el.classList.toggle('done', arr.every(Boolean)); });
+  document.querySelectorAll('.set.next').forEach(b => b.classList.remove('next'));
+  const nx = nextStep(null);
+  if (nx) document.querySelectorAll(`.set[data-k="${nx.k}"][data-i="${nx.i}"]`).forEach(b => b.classList.add('next'));
 }
 
 // "1'30" "1’30" "90s" "90\"" "2 min" "1:30" "45" → secondes
@@ -233,31 +331,130 @@ function parseRest(r){
   if ((m = s.match(/^(\d+(?:[.,]\d+)?)min$/))) return Math.round(parseFloat(m[1].replace(',','.'))*60);
   return 0;
 }
+function fmt(sec){ return sec >= 60 ? Math.floor(sec/60) + ':' + String(sec%60).padStart(2,'0') : sec + ' s'; }
 
-// ---------- Chrono ----------
-let tEnd = 0, tInt = null, tDone = false;
-function startTimer(sec, nom){
-  tEnd = Date.now() + sec*1000; tDone = false;
-  document.getElementById('timer-lbl').textContent = 'Repos · ' + (nom || '');
-  document.getElementById('timer').classList.add('open');
-  clearInterval(tInt); tick(); tInt = setInterval(tick, 250);
+// ---------- Illustrations ----------
+const ICON_WATER = `<svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9fd8ff" stop-opacity=".35"/><stop offset=".5" stop-color="#e8f6ff" stop-opacity=".18"/><stop offset="1" stop-color="#9fd8ff" stop-opacity=".35"/></linearGradient>
+    <linearGradient id="wt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5cc2ff"/><stop offset="1" stop-color="#1565C0"/></linearGradient>
+    <clipPath id="bc"><path d="M30 46 Q30 36 38 32 L38 24 L62 24 L62 32 Q70 36 70 46 L72 182 Q72 192 62 192 L38 192 Q28 192 28 182 Z"/></clipPath>
+  </defs>
+  <rect x="36" y="6" width="28" height="18" rx="4" fill="#C8102E"/>
+  <rect x="36" y="10" width="28" height="3" fill="#8B0A20"/><rect x="36" y="16" width="28" height="3" fill="#8B0A20"/>
+  <g clip-path="url(#bc)">
+    <rect x="20" y="0" width="60" height="200" fill="url(#bt)"/>
+    <g class="wave"><path d="M10 92 Q25 84 40 92 T70 92 T100 92 L100 200 L10 200 Z" fill="url(#wt)"/></g>
+    <circle cx="42" cy="140" r="3" fill="#fff" opacity=".5"/><circle cx="56" cy="160" r="2" fill="#fff" opacity=".4"/><circle cx="48" cy="118" r="2.5" fill="#fff" opacity=".45"/>
+  </g>
+  <path d="M30 46 Q30 36 38 32 L38 24 L62 24 L62 32 Q70 36 70 46 L72 182 Q72 192 62 192 L38 192 Q28 192 28 182 Z" fill="none" stroke="#cfeaff" stroke-width="3" opacity=".9"/>
+  <rect x="31" y="108" width="38" height="30" rx="3" fill="#0A0A0A" opacity=".85"/>
+  <polygon points="52,111 44,124 49,124 47,135 56,121 51,121" fill="#C8102E"/>
+  <path d="M35 60 L35 170" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".35"/>
+</svg>`;
+const ICON_WORK = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" class="pulse"><defs><linearGradient id="wk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#C8102E"/><stop offset="1" stop-color="#8B0A20"/></linearGradient></defs><polygon points="24,3 8,22 18,22 14,37 32,16 22,16" fill="url(#wk)"/></svg>`;
+const ICON_GO = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" class="pulse"><circle cx="20" cy="20" r="17" fill="#3FB37F"/><path d="M12 20.5 L18 26 L29 14" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const TIPS_REST = ['Bois une gorgée 💧', 'Respire profondément par le nez', 'Relâche les épaules', 'Secoue les jambes, reste actif', 'Prépare-toi pour la suite'];
+
+// ---------- Chrono plein écran ----------
+const R = 106, CIRC = 2 * Math.PI * R;
+let T = { mode:null, end:0, total:0, int:null, done:false, k:null, i:null };
+function openOverlay(mode){
+  const ov = document.getElementById('ov');
+  ov.className = 'ov open ' + mode;
+  document.body.classList.add('lock');
+  const ring = document.getElementById('ov-ring');
+  ring.style.strokeDasharray = CIRC; ring.style.strokeDashoffset = 0;
 }
+function startRest(sec, nx, kind){
+  T = Object.assign(T, { mode:'rest', end: Date.now() + sec*1000, total: sec, done:false });
+  openOverlay('rest');
+  document.getElementById('ov-kicker').textContent = kind === 'tour' ? 'Fin du tour · repos' : (kind === 'exo' ? 'Transition' : 'Temps de repos');
+  document.getElementById('ov-title').textContent = 'Récup !';
+  document.getElementById('ov-icon').innerHTML = ICON_WATER;
+  document.getElementById('ov-tip').textContent = TIPS_REST[Math.floor(Math.random() * TIPS_REST.length)];
+  document.getElementById('ov-next').style.display = '';
+  document.getElementById('ov-next-v').textContent = stepLabel(nx);
+  document.getElementById('ov-skip').textContent = 'Passer';
+  run();
+}
+function startWork(k){
+  const s = nextUncheckedOf(k);
+  if (!s) return;
+  const sec = workSeconds(s.x);
+  T = Object.assign(T, { mode:'work', end: Date.now() + sec*1000, total: sec, done:false, k: s.k, i: s.i });
+  openOverlay('work');
+  const n = nbSets(s.b, s.x);
+  document.getElementById('ov-kicker').textContent = `${s.x.num} · ${s.x.nom}${n > 1 ? ` · ${isCircuit(s.b) ? 'tour' : 'série'} ${s.i+1}/${n}` : ''}`;
+  document.getElementById('ov-title').textContent = 'Effort !';
+  document.getElementById('ov-icon').innerHTML = ICON_WORK;
+  document.getElementById('ov-tip').textContent = 'Tiens bon, garde une bonne technique';
+  document.getElementById('ov-next').style.display = 'none';
+  document.getElementById('ov-skip').textContent = 'Terminé';
+  keepAwake(); beep(1, 660);
+  run();
+}
+function nextUncheckedOf(k){ return steps().find(s => s.k === k && !P.sets[s.k+'-'+s.i]) || null; }
+function run(){ clearInterval(T.int); tick(); T.int = setInterval(tick, 200); }
 function tick(){
-  const left = Math.max(0, Math.round((tEnd - Date.now())/1000));
-  const el = document.getElementById('timer-val');
-  el.textContent = Math.floor(left/60) + ':' + String(left%60).padStart(2,'0');
-  el.classList.toggle('end', left === 0);
-  if (left === 0 && !tDone) { tDone = true; buzz(); document.getElementById('timer-lbl').textContent = 'C\'est reparti 💪'; setTimeout(stopTimer, 4000); }
+  const leftMs = Math.max(0, T.end - Date.now());
+  const left = Math.ceil(leftMs / 1000);
+  document.getElementById('ov-time').textContent = Math.floor(left/60) + ':' + String(left%60).padStart(2,'0');
+  document.getElementById('ov-ring').style.strokeDashoffset = CIRC * (1 - leftMs / (T.total * 1000 || 1));
+  if (left <= 3 && left > 0 && !T['b'+left]) { T['b'+left] = true; beep(1, 520); }
+  if (leftMs === 0 && !T.done) { T.done = true; endTimer(false); }
 }
-function stopTimer(){ clearInterval(tInt); document.getElementById('timer').classList.remove('open'); }
-function buzz(){
-  try { navigator.vibrate && navigator.vibrate([300,150,300]); } catch(e){}
-  try { const a = new (window.AudioContext||window.webkitAudioContext)(); [0,0.25].forEach(t=>{ const o=a.createOscillator(), g=a.createGain(); o.frequency.value=880; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(.25,a.currentTime+t); o.start(a.currentTime+t); o.stop(a.currentTime+t+.15); }); } catch(e){}
+function endTimer(skipped){
+  clearInterval(T.int);
+  [1,2,3].forEach(n => delete T['b'+n]);
+  if (T.mode === 'work') {
+    const { k, i } = T;
+    if (!skipped) { buzz(); }
+    closeOverlay();
+    if (k !== null && !P.sets[k + '-' + i]) toggleSet(k, i, true);   // coche la série et enchaîne sur le repos
+    return;
+  }
+  if (skipped) return closeOverlay();
+  buzz();
+  const ov = document.getElementById('ov');
+  ov.className = 'ov open go';
+  document.getElementById('ov-kicker').textContent = 'Fin du repos';
+  document.getElementById('ov-title').textContent = "C'est reparti !";
+  document.getElementById('ov-icon').innerHTML = ICON_GO;
+  document.getElementById('ov-tip').textContent = '';
+  document.getElementById('ov-skip').textContent = 'Go';
+  setTimeout(() => { if (document.getElementById('ov').classList.contains('go')) closeOverlay(); }, 2500);
 }
-document.getElementById('t-plus').onclick = () => { tEnd += 15000; tDone = false; };
-document.getElementById('t-minus').onclick = () => { tEnd -= 15000; };
-document.getElementById('t-skip').onclick = stopTimer;
+function closeOverlay(){
+  clearInterval(T.int);
+  document.getElementById('ov').className = 'ov';
+  document.body.classList.remove('lock');
+  const nx = nextStep(null);
+  if (nx) { const el = document.getElementById('exo-' + nx.k); if (el) el.scrollIntoView({behavior:'smooth', block:'center'}); }
+}
+document.getElementById('ov-plus').onclick = () => { T.end += 15000; T.total += 15; T.done = false; };
+document.getElementById('ov-minus').onclick = () => { T.end -= 15000; };
+document.getElementById('ov-skip').onclick = () => {
+  const ov = document.getElementById('ov');
+  if (ov.classList.contains('go')) return closeOverlay();
+  T.done = true; endTimer(true);
+};
 document.getElementById('zoom').onclick = () => document.getElementById('zoom').classList.remove('open');
+
+// ---------- Son, vibration, écran allumé ----------
+let AC = null;
+function beep(times, freq){
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    for (let n = 0; n < times; n++) { const o = AC.createOscillator(), g = AC.createGain(); o.frequency.value = freq || 880; o.connect(g); g.connect(AC.destination); const t = AC.currentTime + n * 0.25; g.gain.setValueAtTime(.25, t); o.start(t); o.stop(t + .15); }
+  } catch(e){}
+}
+function buzz(){ try { navigator.vibrate && navigator.vibrate([300,150,300]); } catch(e){} beep(2, 880); }
+let wakeLock = null;
+async function keepAwake(){
+  try { if ('wakeLock' in navigator && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => wakeLock = null); } } catch(e){}
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden && Object.keys(P.sets).length) keepAwake(); });
 
 // ---------- Fin de séance → page de retour ----------
 function finish(e){
@@ -265,7 +462,7 @@ function finish(e){
   const {tot, done} = counts();
   const fait = done === 0 ? '' : (done >= tot ? 'En entier' : 'En partie');
   const loads = [];
-  allExos().forEach(({x,k}) => { if (P.loads[k]) loads.push(`${x.nom} : ${P.loads[k]}`); });
+  (S.sections||[]).forEach((sec,si) => sec.blocs.forEach((b,bi) => b.exos.forEach((x,ei) => { const k = `${si}-${bi}-${ei}`; if (P.loads[k]) loads.push(`${x.nom} : ${P.loads[k]}`); })));
   const extra = [`${done}/${tot} séries faites`].concat(loads.length ? ['Charges : ' + loads.join(' · ')] : []).join(' — ');
   const q = [['nom', S.client], ['seance', S.titre], ['date', S.date], ['fait', fait], ['extra', extra]]
     .filter(([,v]) => v).map(([k,v]) => k + '=' + encodeURIComponent(v)).join('&');
