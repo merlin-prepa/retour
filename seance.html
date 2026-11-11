@@ -195,7 +195,7 @@ function stepLabel(s){
 function specsHtml(b, x){
   const out = [];
   if (x.series && !isCircuit(b)) out.push(`<b>${esc(x.series)}</b> séries`);
-  if (x.reps) out.push(`<b>${esc(x.reps)}</b>${x.repsUnit ? ' ' + esc(x.repsUnit) : ' reps'}`);
+  if (x.reps) out.push(`<b>${esc(x.reps)}</b>${x.repsUnit ? ' ' + esc(x.repsUnit) : ' reps'}${x.perSide ? ' <b>par côté</b>' : ''}`);
   if (x.charge) out.push(`<b>${esc(x.charge)}</b> ${esc(x.chargeUnit || 'kg')}`);
   if (x.repos) out.push(`repos <b>${esc(x.repos)}</b>`);
   if (x.rpe) out.push(`RPE <b>${esc(x.rpe)}</b>`);
@@ -253,7 +253,7 @@ function render(){
             </div>
             ${x.notes ? `<div class="notes">${esc(x.notes)}</div>` : ''}
             ${(x.video || ws) ? `<div class="actions">
-              ${ws ? `<button class="work-btn" data-work="${k}">⏱ Lancer ${fmt(ws)}</button>` : ''}
+              ${ws ? `<button class="work-btn" data-work="${k}">⏱ Lancer ${fmt(ws)}${x.perSide ? ' × 2 côtés' : ''}</button>` : ''}
               ${x.video ? `<a class="video" href="${esc(x.video)}" target="_blank" rel="noopener">▶ Voir la vidéo</a>` : ''}
             </div>` : ''}
             <div class="sets">${sets}</div>
@@ -354,6 +354,7 @@ const ICON_WATER = `<svg viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg
 </svg>`;
 const ICON_WORK = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" class="pulse"><defs><linearGradient id="wk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".45" stop-color="#C8102E"/><stop offset="1" stop-color="#8B0A20"/></linearGradient></defs><polygon points="24,3 8,22 18,22 14,37 32,16 22,16" fill="url(#wk)"/></svg>`;
 const ICON_GO = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" class="pulse"><circle cx="20" cy="20" r="17" fill="#3FB37F"/><path d="M12 20.5 L18 26 L29 14" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const ICON_SWAP = `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" class="pulse"><circle cx="20" cy="20" r="17" fill="#38A8F5"/><path d="M11 15h16l-4-4M29 25H13l4 4" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const TIPS_REST = ['Bois une gorgée 💧', 'Respire profondément par le nez', 'Relâche les épaules', 'Secoue les jambes, reste actif', 'Prépare-toi pour la suite'];
 
 // ---------- Chrono plein écran ----------
@@ -378,20 +379,50 @@ function startRest(sec, nx, kind){
   document.getElementById('ov-skip').textContent = 'Passer';
   run();
 }
+// Effort chronométré : 5 s de mise en place, puis l'effort (× 2 si « par côté », avec 5 s pour changer de côté)
+const PREP_SEC = 5, SWITCH_SEC = 5;
 function startWork(k){
   const s = nextUncheckedOf(k);
   if (!s) return;
   const sec = workSeconds(s.x);
-  T = Object.assign(T, { mode:'work', end: Date.now() + sec*1000, total: sec, done:false, k: s.k, i: s.i });
-  openOverlay('work');
+  const phases = [{ type:'prep', sec: PREP_SEC }];
+  if (s.x.perSide) phases.push({ type:'work', sec, side:1 }, { type:'switch', sec: SWITCH_SEC }, { type:'work', sec, side:2 });
+  else phases.push({ type:'work', sec });
   const n = nbSets(s.b, s.x);
-  document.getElementById('ov-kicker').textContent = `${s.x.num} · ${s.x.nom}${n > 1 ? ` · ${isCircuit(s.b) ? 'tour' : 'série'} ${s.i+1}/${n}` : ''}`;
-  document.getElementById('ov-title').textContent = 'Effort !';
-  document.getElementById('ov-icon').innerHTML = ICON_WORK;
-  document.getElementById('ov-tip').textContent = 'Tiens bon, garde une bonne technique';
+  T = Object.assign(T, { mode:'work', phases, ph: -1, k: s.k, i: s.i,
+    head: `${s.x.num} · ${s.x.nom}${n > 1 ? ` · ${isCircuit(s.b) ? 'tour' : 'série'} ${s.i+1}/${n}` : ''}` });
   document.getElementById('ov-next').style.display = 'none';
-  document.getElementById('ov-skip').textContent = 'Terminé';
-  keepAwake(); beep(1, 660);
+  keepAwake();
+  nextPhase();
+}
+function nextPhase(){
+  T.ph++;
+  const p = T.phases[T.ph];
+  if (!p) { T.done = true; return endTimer(false); }
+  Object.assign(T, { end: Date.now() + p.sec * 1000, total: p.sec, done: false });
+  [1,2,3].forEach(n => delete T['b'+n]);
+  const set = (id, v) => document.getElementById(id).textContent = v;
+  if (p.type === 'prep') {
+    openOverlay('rest');
+    set('ov-kicker', T.head); set('ov-title', 'Mets-toi en place');
+    document.getElementById('ov-icon').innerHTML = ICON_WORK;
+    set('ov-tip', T.phases.some(x => x.side) ? 'On commence par le 1er côté' : 'Ça démarre dans quelques secondes');
+    set('ov-skip', 'Go');
+  } else if (p.type === 'switch') {
+    openOverlay('rest');
+    set('ov-kicker', T.head); set('ov-title', 'Autre côté !');
+    document.getElementById('ov-icon').innerHTML = ICON_SWAP;
+    set('ov-tip', 'Mets-toi en place sur l\u2019autre côté');
+    set('ov-skip', 'Go'); buzz();
+  } else {
+    openOverlay('work');
+    set('ov-kicker', T.head + (p.side ? ` · côté ${p.side}/2` : ''));
+    set('ov-title', p.side ? `Côté ${p.side} !` : 'Effort !');
+    document.getElementById('ov-icon').innerHTML = ICON_WORK;
+    set('ov-tip', 'Tiens bon, garde une bonne technique');
+    set('ov-skip', p.side === 1 ? 'Côté suivant' : 'Terminé');
+    beep(1, 660);
+  }
   run();
 }
 function nextUncheckedOf(k){ return steps().find(s => s.k === k && !P.sets[s.k+'-'+s.i]) || null; }
@@ -402,7 +433,7 @@ function tick(){
   document.getElementById('ov-time').textContent = Math.floor(left/60) + ':' + String(left%60).padStart(2,'0');
   document.getElementById('ov-ring').style.strokeDashoffset = CIRC * (1 - leftMs / (T.total * 1000 || 1));
   if (left <= 3 && left > 0 && !T['b'+left]) { T['b'+left] = true; beep(1, 520); }
-  if (leftMs === 0 && !T.done) { T.done = true; endTimer(false); }
+  if (leftMs === 0 && !T.done) { T.done = true; if (T.mode === 'work') nextPhase(); else endTimer(false); }
 }
 function endTimer(skipped){
   clearInterval(T.int);
@@ -436,6 +467,7 @@ document.getElementById('ov-plus').onclick = () => { T.end += 15000; T.total += 
 document.getElementById('ov-minus').onclick = () => { T.end -= 15000; };
 document.getElementById('ov-skip').onclick = () => {
   const ov = document.getElementById('ov');
+  if (T.mode === 'work' && T.phases && T.ph < T.phases.length - 1) { clearInterval(T.int); return nextPhase(); }
   if (ov.classList.contains('go')) return closeOverlay();
   T.done = true; endTimer(true);
 };
