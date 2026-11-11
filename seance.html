@@ -327,7 +327,7 @@ function parseRest(r){
   const s = String(r).toLowerCase().replace(/\s/g,'').replace(/’/g,"'").replace(/''/g,'"');
   let m;
   if ((m = s.match(/^(\d+)[':m](?:in)?(\d{1,2})?(?:"|s)?$/))) return (+m[1])*60 + (+(m[2]||0));
-  if ((m = s.match(/^(\d+)(?:"|s|sec)?$/))) return +m[1] > 15 || /["s]/.test(s) ? +m[1] : (+m[1])*60;
+  if ((m = s.match(/^(\d+)(?:"|s|sec)?$/))) return +m[1] > 5 ? +m[1] : (+m[1])*60;   // « 15 » = 15 s · « 2 » = 2 min
   if ((m = s.match(/^(\d+(?:[.,]\d+)?)min$/))) return Math.round(parseFloat(m[1].replace(',','.'))*60);
   return 0;
 }
