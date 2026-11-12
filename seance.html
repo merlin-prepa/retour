@@ -217,6 +217,7 @@ function render(){
   const prenom = (S.client || '').split(' ')[0];
   const d = S.date ? new Date(S.date + 'T12:00:00') : null;
   const meta = [
+    S.cycle ? `<div><b>Cycle</b>${esc(S.cycle)}</div>` : '',
     d && !isNaN(d) ? `<div><b>Date</b>${d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})}</div>` : '',
     S.duree ? `<div><b>Durée</b>${esc(S.duree)}</div>` : '',
     S.objectif ? `<div><b>Objectif</b>${esc(S.objectif)}</div>` : '',
